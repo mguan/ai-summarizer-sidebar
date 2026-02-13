@@ -12,6 +12,9 @@ A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok)
 -   **Sidebar Interface:** persistent access to your AI assistant alongside your browsing content.
 -   **Header Modification:** handles `X-Frame-Options` and CSP headers to ensure AI providers load correctly within the sidebar.
 
+> [!WARNING]
+> **Security Risk**: This extension modifies the `X-Frame-Options` and `Content-Security-Policy` headers for Gemini, ChatGPT, Claude, and Grok to allow them to be embedded in the sidebar. This reduces the security protections of these websites while the extension is active, potentially exposing them to clickjacking attacks. Use with caution.
+
 ## Installation
 
 
