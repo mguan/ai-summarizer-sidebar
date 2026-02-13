@@ -13,49 +13,36 @@ const Providers = {
         getSubmitButton: () => document.querySelector('button[aria-label*="Send"]'),
         fillInput: (input, text) => {
             input.focus();
-            input.innerHTML = text; // ProseMirror often needs innerHTML for rich text
+            input.innerHTML = text;
             input.dispatchEvent(new Event('input', { bubbles: true }));
         }
     },
     'gemini.google.com': {
         getInput: () => {
-            // Enhanced strategy for finding Gemini's input
             const selectors = [
-                'rich-textarea > div[contenteditable="true"]', // Most common recent selector
-                'div[role="textbox"][contenteditable="true"]', // Generic accessible textbox
-                'div[aria-label*="Enter a prompt"]', // Accessibility label
-                '.input-area div[contenteditable="true"]', // Old class-based
-                'textarea' // Fallback
+                'rich-textarea > div[contenteditable="true"]',
+                'div[role="textbox"][contenteditable="true"]',
+                'div[aria-label*="Enter a prompt"]',
+                '.input-area div[contenteditable="true"]',
+                'textarea'
             ];
-            for (const selector of selectors) {
-                const el = document.querySelector(selector);
-                if (el) return el;
-            }
-            return null;
+            return selectors.map(s => document.querySelector(s)).find(el => el) || null;
         },
         getSubmitButton: () => {
             const selectors = [
                 'button[aria-label="Send message"]',
                 'button[aria-label*="Send"]',
                 'button[aria-label*="Submit"]',
-                '.send-button' // Generic fallback
+                '.send-button'
             ];
-            for (const selector of selectors) {
-                const btn = document.querySelector(selector);
-                if (btn && !btn.hasAttribute('disabled') && btn.getAttribute('aria-disabled') !== 'true') {
-                    return btn;
-                }
-            }
-            return null;
+            // Helper to check if button is enabled
+            const isEnabled = (btn) => btn && !btn.hasAttribute('disabled') && btn.getAttribute('aria-disabled') !== 'true';
+            return selectors.map(s => document.querySelector(s)).find(isEnabled) || null;
         },
         fillInput: (input, text) => {
             input.focus();
-            // Gemini is tricky; sometimes execCommand works best to trigger internal state
-            document.execCommand('insertText', false, text);
-            // Dispatch events to ensure state is updated if execCommand didn't fully work
+            document.execCommand('insertText', false, text); // Gemini specific legacy support
             input.dispatchEvent(new Event('input', { bubbles: true }));
-            // Sometimes a keypress is needed to wake up the "Send" button
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
         }
     },
     'grok.com': {
@@ -63,7 +50,6 @@ const Providers = {
         getSubmitButton: () => document.querySelector('button[aria-label="Send"], button[type="submit"]'),
         fillInput: (input, text) => {
             input.focus();
-            // Tiptap/ProseMirror usually handles HTML well
             input.innerHTML = `<p>${text}</p>`;
             input.dispatchEvent(new Event('input', { bubbles: true }));
         }
@@ -72,33 +58,34 @@ const Providers = {
 
 function getProvider() {
     const hostname = window.location.hostname;
-    for (const key in Providers) {
-        if (hostname.includes(key)) {
-            return Providers[key];
-        }
-    }
-    return null;
+    // Iterate keys and check if hostname includes the key
+    return Object.keys(Providers).reduce((found, key) => hostname.includes(key) ? Providers[key] : found, null);
 }
 
 async function injectPrompt() {
+    // Avoid re-injection if already done
+    if (window.hasInjectedPrompt) return;
+
     const params = new URLSearchParams(window.location.search);
     const promptText = params.get("custom_q");
     const autoSubmit = params.get("auto_submit") === 'true';
 
-    if (!promptText || window.hasInjectedPrompt) return;
+    if (!promptText) return;
 
     const provider = getProvider();
     if (!provider) {
-        console.warn("AI Summarizer: No provider found for this hostname.");
+        // Only log if we expect to find a provider but didn't (silent fail is okay for generally unsupported sites, but this script only runs on matches)
+        console.warn("AI Summarizer: No provider match found for", window.location.hostname);
         return;
     }
 
-    // Retry finding the input element
-    let inputField = null;
-    for (let i = 0; i < 10; i++) {
-        inputField = provider.getInput();
-        if (inputField) break;
+    // Try finding input
+    let inputField = provider.getInput();
+    let retries = 0;
+    while (!inputField && retries < 10) {
         await new Promise(r => setTimeout(r, 500));
+        inputField = provider.getInput();
+        retries++;
     }
 
     if (inputField) {
@@ -106,29 +93,46 @@ async function injectPrompt() {
         provider.fillInput(inputField, promptText);
 
         if (autoSubmit) {
-            // Retry finding and clicking the submit button
-            for (let i = 0; i < 10; i++) {
-                const sendButton = provider.getSubmitButton();
-                if (sendButton) {
-                    sendButton.click();
-                    break;
-                }
-                await new Promise(r => setTimeout(r, 800)); // Slightly longer wait for button state
+            // Wait for button to become ready
+            let sendButton = provider.getSubmitButton();
+            let buttonRetries = 0;
+            while (!sendButton && buttonRetries < 15) { // Slightly more retries for button state
+                await new Promise(r => setTimeout(r, 500));
+                sendButton = provider.getSubmitButton();
+                buttonRetries++;
+            }
+
+            if (sendButton) {
+                // Small delay to ensure UI is interactive
+                setTimeout(() => sendButton.click(), 300);
             }
         }
     } else {
-        console.warn("AI Summarizer: Could not find input field after retries.");
+        console.warn("AI Summarizer: Could not find input field.");
     }
 }
-
 
 // Run immediately
 injectPrompt();
 
-// Also observe for dynamic loading (SPA navigation)
+// Basic debounce implementation
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+const debouncedInject = debounce(injectPrompt, 500);
+
 const observer = new MutationObserver((mutations) => {
     if (!window.hasInjectedPrompt) {
-        injectPrompt();
+        debouncedInject();
     }
 });
 

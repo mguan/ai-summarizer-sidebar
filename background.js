@@ -1,8 +1,12 @@
-// Import shared constants (available in Service Worker context)
+// Import shared constants and utilities (available in Service Worker context)
 try {
     importScripts('constants.js');
 } catch (e) {
-    console.error(e);
+    console.error("Failed to import scripts in background worker:", e);
+}
+
+function isValidHttpUrl(url) {
+    return url && url.startsWith('http');
 }
 
 // Open side panel on icon click
@@ -10,6 +14,12 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
 // Modify headers to allow embedding
 const EXTENSION_ORIGIN = 'chrome-extension://' + chrome.runtime.id;
+const AI_DOMAINS = [
+    "chatgpt\\.com",
+    "claude\\.ai",
+    "gemini\\.google\\.com",
+    "grok\\.com"
+];
 
 const RULES = [
     {
@@ -23,8 +33,8 @@ const RULES = [
             ]
         },
         condition: {
-            // Match Gemini, ChatGPT, Claude, and Grok
-            regexFilter: "^https://(gemini\\.google\\.com|chatgpt\\.com|claude\\.ai|grok\\.com)/.*",
+            // Match supported AI providers
+            regexFilter: `^https://(${AI_DOMAINS.join('|')})/.*`,
             resourceTypes: ["sub_frame"]
         }
     }
@@ -49,12 +59,14 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 // Detect URL changes to trigger the content update
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete' && tab.url && (tab.url.startsWith('http'))) {
+    // Check if the tab status is complete and the URL is valid/http(s)
+    // isValidHttpUrl is available from utils.js
+    if (changeInfo.status === 'complete' && isValidHttpUrl(tab.url)) {
         chrome.runtime.sendMessage({
             type: "UPDATE_CONTENT",
             url: tab.url
         }).catch((error) => {
-            // Suppress error if side panel is closed (no receiver)
+            // Suppress error if side panel is closed (no receiver), which is expected behavior
         });
     }
 });
