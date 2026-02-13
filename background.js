@@ -15,7 +15,7 @@ const RULES = [
         },
         condition: {
             // Match Gemini, ChatGPT, Claude, and Grok
-            regexFilter: "^https://(gemini\\.google\\.com|chatgpt\\.com|claude\\.ai|grok\\.com)/.*",
+            regexFilter: "^https://(gemini\\.google\\.com|chatgpt\\.com|claude\\.ai|grok\\.com|accounts\\.google\\.com)/.*",
             resourceTypes: ["sub_frame"]
         }
     }
