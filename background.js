@@ -1,3 +1,10 @@
+// Import shared constants (available in Service Worker context)
+try {
+    importScripts('constants.js');
+} catch (e) {
+    console.error(e);
+}
+
 // Open side panel on icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
@@ -24,6 +31,18 @@ const RULES = [
 chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: RULES.map(r => r.id),
     addRules: RULES
+});
+
+// Initialize default settings on install
+chrome.runtime.onInstalled.addListener((details) => {
+    chrome.storage.local.get(['customPrompts', 'provider'], (result) => {
+        if (!result.customPrompts && typeof DEFAULT_PROMPTS !== 'undefined') {
+            chrome.storage.local.set({ customPrompts: DEFAULT_PROMPTS });
+        }
+        if (!result.provider) {
+            chrome.storage.local.set({ provider: 'gemini' });
+        }
+    });
 });
 
 // Detect URL changes to trigger the content update
