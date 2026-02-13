@@ -1,9 +1,4 @@
-// Import shared constants and utilities (available in Service Worker context)
-try {
-    importScripts('constants.js');
-} catch (e) {
-    console.error("Failed to import scripts in background worker:", e);
-}
+import { DEFAULT_PROMPTS, DEFAULT_PROVIDER } from './constants.js';
 
 // Open side panel on icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });

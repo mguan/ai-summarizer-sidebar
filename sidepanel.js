@@ -1,12 +1,4 @@
-// --- Constants ---
-const DEFAULT_PROVIDER = 'gemini';
-const PROVIDER_URLS = {
-    'chatgpt': 'https://chatgpt.com/?custom_q=',
-    'claude': 'https://claude.ai/new?custom_q=',
-    'gemini': 'https://gemini.google.com/app?custom_q=',
-    'grok': 'https://grok.com/?custom_q='
-};
-
+import { DEFAULT_PROVIDER, PROVIDER_URLS } from './constants.js';
 // --- State ---
 const state = {
     provider: DEFAULT_PROVIDER,

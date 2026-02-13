@@ -1,4 +1,4 @@
-const GENERIC_PROMPT = `Role: You are an expert researcher.
+export const GENERIC_PROMPT = `Role: You are an expert researcher.
 Task: Summarize the provided webpage.
 Constraints: Ignore navigation menus, footers, and advertisements.
 Structure: Provide a concise 2-3 sentence overview of the page content.
@@ -7,7 +7,7 @@ Tone: Direct, informative, and objective.
 Language: Use the same language as the content.
 Content: {{URL}}`;
 
-const YOUTUBE_PROMPT = `Role: You are an expert researcher.
+export const YOUTUBE_PROMPT = `Role: You are an expert researcher.
 Task: Summarize the provided YouTube video.
 Constraints: Remove bloat: ignore all sponsorships, "like and subscribe" requests, intro/outro music descriptions, and repetitive filler.
 Structure: Provide a concise 2-3 sentence overview of the video's purpose.
@@ -16,10 +16,17 @@ Tone: Direct, informative, and objective.
 Language: Use the same language as the content.
 Video: {{URL}}`;
 
-const DEFAULT_PROMPTS = [
+export const DEFAULT_PROMPTS = [
     { pattern: "*", prompt: GENERIC_PROMPT },
     { pattern: "*youtube.com/watch*", prompt: YOUTUBE_PROMPT },
     { pattern: "*youtu.be/*", prompt: YOUTUBE_PROMPT }
 ];
 
-const DEFAULT_PROVIDER = 'gemini';
+export const DEFAULT_PROVIDER = 'gemini';
+
+export const PROVIDER_URLS = {
+    'chatgpt': 'https://chatgpt.com/?custom_q=',
+    'claude': 'https://claude.ai/new?custom_q=',
+    'gemini': 'https://gemini.google.com/app?custom_q=',
+    'grok': 'https://grok.com/?custom_q='
+};
