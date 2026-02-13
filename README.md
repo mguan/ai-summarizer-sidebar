@@ -26,7 +26,8 @@ A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok)
 ## Installation
 
 
-1.  **Download** the latest release "Source code (zip)" from the [releases page](https://github.com/mguan/ai-summarizer-sidebar/releases) (e.g., https://github.com/mguan/ai-summarizer-sidebar/archive/refs/tags/v0.2.zip) and unzip the file.
+1.  **Download** the latest release "Source code (zip)" from the [releases page](https://github.com/mguan/ai-summarizer-sidebar/releases)
+ and unzip the file.
 2.  Open Google Chrome and navigate to `chrome://extensions/`.
 3.  Toggle **Developer mode** in the top right corner.
 4.  Click **Load unpacked** in the top left.
