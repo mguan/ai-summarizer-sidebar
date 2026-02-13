@@ -1,3 +1,5 @@
+import { DEFAULT_PROMPTS, DEFAULT_PROVIDER } from './constants.js';
+
 const elements = {
     promptSelect: document.getElementById('prompt-select'),
     editArea: document.getElementById('edit-area'),
@@ -14,14 +16,14 @@ const elements = {
 
 let state = {
     prompts: [],
-    provider: 'gemini'
+    provider: DEFAULT_PROVIDER
 };
 
 // Initialize
 function init() {
     chrome.storage.local.get(['customPrompts', 'provider'], (result) => {
         state.prompts = result.customPrompts || [...DEFAULT_PROMPTS];
-        state.provider = result.provider || 'gemini';
+        state.provider = result.provider || DEFAULT_PROVIDER;
 
         if (!result.customPrompts) {
             chrome.storage.local.set({ customPrompts: state.prompts });
