@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Summarizer Sidebar Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Summarizer Sidebar Settings</h1>
+            <span class="version">v0.1</span>
+        </header>
+
+        <main>
+            <!-- AI Provider Section -->
+            <section>
+                <h2>General</h2>
+                <div class="form-group">
+                    <label for="provider-select">Preferred AI Service</label>
+                    <select id="provider-select">
+                        <option value="claude">Anthropic Claude</option>
+                        <option value="chatgpt">ChatGPT</option>
+                        <option value="gemini">Google Gemini</option>
+                        <option value="grok">xAI Grok</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Prompts Management Section -->
+            <section>
+                <div class="flex-between">
+                    <h2>Custom Prompts</h2>
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt-select">Select Pattern to Edit</label>
+                    <select id="prompt-select">
+                        <option value="new">-- Add New Pattern --</option>
+                    </select>
+                </div>
+
+                <div id="edit-area" class="card-panel">
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; margin-top: 8px; margin-bottom: 4px;">
+                            <label class="sub-label" style="margin: 0;">URL Pattern</label>
+                            <div class="help-icon" style="margin-left: 6px;">?
+                                <div class="help-tooltip">
+                                    <strong>Pattern Matching Rules:</strong>
+                                    <ul>
+                                        <li><code>*</code> matches any part of the URL.</li>
+                                        <li>If multiple patterns match, the longest one is used.</li>
+                                        <li>Wildcard (<code>*</code>) matches populate the prompt but do not send.</li>
+                                        <li>Specific patterns populate and auto-send to the AI.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" id="edit-pattern" placeholder="e.g. *wikipedia.org* or *youtube.com*">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sub-label">Prompt Template</label>
+                        <textarea id="edit-prompt-text" placeholder="Enter instructions for the AI..."></textarea>
+                    </div>
+
+                    <div class="flex-between">
+                        <div id="status-indicator" class="status-bar"></div>
+
+                        <div class="btn-group">
+                            <!-- JS controls visibility of Delete/Reset -->
+                            <button id="delete-prompt-btn" class="btn-danger" style="display: none;">Delete</button>
+                            <button id="reset-prompt-btn" class="btn-secondary" style="display: none;">Reset
+                                Default</button>
+                            <button id="save-edit-btn" class="btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <button id="reset-all-btn" class="btn-ghost">Reset All Prompts to Default</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="options.js"></script>
+</body>
+
+</html>
