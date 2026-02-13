@@ -1,8 +1,8 @@
 const PROVIDERS = {
     'chatgpt.com': {
         inputSelector: '#prompt-textarea',
-        submitSelector: 'button[data-testid="send-button"]',
-        inputType: 'textarea'
+        submitSelector: '#composer-submit-button',
+        inputType: 'contenteditable'
     },
     'claude.ai': {
         inputSelector: 'div[contenteditable="true"], fieldset div[contenteditable="true"]',
