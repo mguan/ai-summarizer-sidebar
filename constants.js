@@ -21,3 +21,5 @@ const DEFAULT_PROMPTS = [
     { pattern: "*youtube.com/watch*", prompt: YOUTUBE_PROMPT },
     { pattern: "*youtu.be/*", prompt: YOUTUBE_PROMPT }
 ];
+
+const DEFAULT_PROVIDER = 'gemini';

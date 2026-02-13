@@ -5,10 +5,6 @@ try {
     console.error("Failed to import scripts in background worker:", e);
 }
 
-function isValidHttpUrl(url) {
-    return url && url.startsWith('http');
-}
-
 // Open side panel on icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
@@ -52,16 +48,14 @@ chrome.runtime.onInstalled.addListener((details) => {
             chrome.storage.local.set({ customPrompts: DEFAULT_PROMPTS });
         }
         if (!result.provider) {
-            chrome.storage.local.set({ provider: 'gemini' });
+            chrome.storage.local.set({ provider: DEFAULT_PROVIDER });
         }
     });
 });
 
 // Detect URL changes to trigger the content update
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    // Check if the tab status is complete and the URL is valid/http(s)
-    // isValidHttpUrl is available from utils.js
-    if (changeInfo.status === 'complete' && isValidHttpUrl(tab.url)) {
+    if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
         chrome.runtime.sendMessage({
             type: "UPDATE_CONTENT",
             url: tab.url
