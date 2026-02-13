@@ -9,6 +9,8 @@ try {
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
 // Modify headers to allow embedding
+const EXTENSION_ORIGIN = 'chrome-extension://' + chrome.runtime.id;
+
 const RULES = [
     {
         id: 1,
@@ -17,7 +19,7 @@ const RULES = [
             type: "modifyHeaders",
             responseHeaders: [
                 { header: "X-Frame-Options", operation: "remove" },
-                { header: "content-security-policy", operation: "remove" }
+                { header: "content-security-policy", operation: "set", value: `frame-ancestors 'self' ${EXTENSION_ORIGIN}` }
             ]
         },
         condition: {

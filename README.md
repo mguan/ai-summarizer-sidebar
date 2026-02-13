@@ -13,7 +13,15 @@ A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok)
 -   **Header Modification:** handles `X-Frame-Options` and CSP headers to ensure AI providers load correctly within the sidebar.
 
 > [!WARNING]
-> **Security Risk**: This extension modifies the `X-Frame-Options` and `Content-Security-Policy` headers for Gemini, ChatGPT, Claude, and Grok to allow them to be embedded in the sidebar. This reduces the security protections of these websites while the extension is active, potentially exposing them to clickjacking attacks. Use with caution.
+> **Security Notice: Header Modification & Embedded Iframes**
+>
+> **How It Works**: This extension functions by embedding AI chat pages (Gemini, ChatGPT, Claude, Grok) directly into the sidebar using an HTML `iframe`. By default, these services send strict security headers (`X-Frame-Options` and `Content-Security-Policy`) to prevent themselves from being embedded anywhere. To make this extension possible, we must **modify these headers** for the specific AI domains to allow framing within the extension.
+>
+> **The Risk**: While we restrict framing to **only this extension** (using `frame-ancestors`)—which is much safer than allowing all framing—it still technically relaxes the strict "do not frame" policy of these providers.
+>
+> **User Caution**:
+> *   **Awareness**: Be aware that while using this extension, you are browsing these AI sites with slightly relaxed framing protections.
+> *   **Trusted Source**: Ensure you install this extension only from a trusted source (e.g., the official repository or Chrome Web Store) to prevent malicious code from exploiting these relaxed headers.
 
 ## Installation
 
