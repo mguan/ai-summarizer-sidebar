@@ -10,8 +10,8 @@ const PROVIDERS = {
         inputType: 'contenteditable'
     },
     'gemini.google.com': {
-        inputSelector: '.input-area div[contenteditable="true"], div[contenteditable="true"][role="textbox"], textarea',
-        submitSelector: 'button[aria-label*="Send"], button[aria-label*="Submit"]',
+        inputSelector: 'div[aria-label="Enter a prompt for Gemini"], .input-area div[contenteditable="true"], div[contenteditable="true"][role="textbox"], textarea',
+        submitSelector: 'button[aria-label="Send message"], button[aria-label*="Send"], button[aria-label*="Submit"]',
         inputType: 'contenteditable'
     },
 
@@ -61,7 +61,7 @@ function injectPrompt() {
             setTimeout(() => {
                 const sendButton = document.querySelector(config.submitSelector);
                 if (sendButton) sendButton.click();
-            }, 800);
+            }, 1000);
         }
     } else {
         retryInjection();

@@ -58,7 +58,7 @@ This extension requires the following permissions to function:
 -   `declarativeNetRequest`: To modify HTTP headers for iframe embedding compatibility.
 -   `storage`: To save your preferences and custom prompts.
 -   `tabs`: To read the current tab's URL.
--   `host_permissions`: Access to AI provider domains (`chatgpt.com`, `claude.ai`, `gemini.google.com`, `grok.com`) to inject scripts.
+-   `host_permissions`: Access to AI provider domains (`accounts.google.com`, `chatgpt.com`, `claude.ai`, `gemini.google.com`, `grok.com`) to inject scripts.
 
 ## Troubleshooting
 
