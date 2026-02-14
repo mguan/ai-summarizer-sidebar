@@ -1,10 +1,10 @@
 import {
     DEFAULT_PROVIDER,
-    PROVIDER_URLS,
+    KEY_AUTO_SUBMIT,
     KEY_CUSTOM_PROMPTS,
     KEY_PROVIDER,
-    KEY_AUTO_SUBMIT,
     MSG_UPDATE_CONTENT,
+    PROVIDER_URLS,
 } from './constants.js';
 // --- State ---
 const state = {
