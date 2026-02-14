@@ -159,7 +159,8 @@ function savePrompt() {
 
 function deletePrompt() {
     const pattern = elements.promptSelect.value;
-    if (pattern === 'new' || !confirm(`Delete prompt for "${pattern}"?`)) return;
+    if (pattern === 'new' || !confirm(`Delete prompt for "${pattern}"?`))
+        return;
 
     state.prompts = state.prompts.filter(p => p.pattern !== pattern);
     saveAndRefresh('Prompt deleted!', 'new');
@@ -169,7 +170,9 @@ function resetCurrentPrompt() {
     const pattern = elements.promptSelect.value;
     const defaultObj = DEFAULT_PROMPTS.find(p => p.pattern === pattern);
 
-    if (!defaultObj || !confirm(`Reset prompt for "${pattern}" to its default value?`)) return;
+    if (!defaultObj ||
+        !confirm(`Reset prompt for "${pattern}" to its default value?`))
+        return;
 
     elements.editPromptText.value = defaultObj.prompt;
     setDirty();

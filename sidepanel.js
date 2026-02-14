@@ -102,13 +102,16 @@ function findMatchingPrompt(url) {
     if (!state.prompts || state.prompts.length === 0) return null;
 
     // Sort by pattern length (longest first) for specificity
-    const sortedPrompts = [...state.prompts].sort((a, b) => b.pattern.length - a.pattern.length);
+    const sortedPrompts = [...state.prompts].sort(
+        (a, b) => b.pattern.length - a.pattern.length
+    );
     return sortedPrompts.find(item => isUrlMatch(url, item.pattern)) || null;
 }
 
 function isUrlMatch(url, pattern) {
     // Convert glob pattern (e.g., "example.com/*") to regex
-    const regexString = '^' + pattern.split('*').map(escapeRegex).join('.*') + '$';
+    const regexString =
+        '^' + pattern.split('*').map(escapeRegex).join('.*') + '$';
     return new RegExp(regexString).test(url);
 }
 

@@ -21,12 +21,19 @@ const RULES = [
             type: 'modifyHeaders',
             responseHeaders: [
                 { header: 'X-Frame-Options', operation: 'remove' },
-                { header: 'content-security-policy', operation: 'set', value: `frame-ancestors 'self' ${EXTENSION_ORIGIN}` },
+                {
+                    header: 'content-security-policy',
+                    operation: 'set',
+                    value: `frame-ancestors 'self' ${EXTENSION_ORIGIN}`
+                },
             ],
         },
         condition: {
             // Match supported AI providers
-            regexFilter: `^(${Object.values(PROVIDER_URLS).map(url => url.replaceAll('.', '\\.')).join('|')}).*`,
+            regexFilter: `^(${Object.values(PROVIDER_URLS)
+                .map(url => url.replaceAll('.', '\\.'))
+                .join('|')
+                }).*`,
             resourceTypes: ['sub_frame'],
         },
     }
@@ -58,7 +65,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         }).catch((error) => {
             // Suppress error if side panel is closed (no receiver), which is expected behavior.
             // However, we log it for debugging purposes if it's something else.
-            if (error.message !== 'The message port closed before a response was received.') {
+            if (
+                error.message !==
+                'The message port closed before a response was received.'
+            ) {
                 console.debug('Background script message error:', error);
             }
         });

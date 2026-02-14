@@ -7,7 +7,10 @@ const KEY_AUTO_SUBMIT = 'auto_submit';
 const Providers = {
     'chatgpt.com': {
         getInput: () => document.querySelector('#prompt-textarea'),
-        getSubmitButton: () => document.querySelector('button[data-testid="send-button"], #composer-submit-button'),
+        getSubmitButton: () =>
+            document.querySelector(
+                'button[data-testid="send-button"], #composer-submit-button'
+            ),
         fillInput: (input, text) => {
             input.focus();
             input.innerHTML = text;
@@ -42,8 +45,12 @@ const Providers = {
                 '.send-button',
             ];
             // Helper to check if button is enabled
-            const isEnabled = (btn) => btn && !btn.hasAttribute('disabled') && btn.getAttribute('aria-disabled') !== 'true';
-            return selectors.map(s => document.querySelector(s)).find(isEnabled) || null;
+            const isEnabled = (btn) =>
+                btn &&
+                !btn.hasAttribute('disabled') &&
+                btn.getAttribute('aria-disabled') !== 'true';
+            return selectors.map(s => document.querySelector(s)).find(isEnabled) ||
+                null;
         },
         fillInput: (input, text) => {
             input.focus();
@@ -53,7 +60,10 @@ const Providers = {
     },
     'grok.com': {
         getInput: () => document.querySelector('.tiptap.ProseMirror'),
-        getSubmitButton: () => document.querySelector('button[aria-label="Send"], button[type="submit"]'),
+        getSubmitButton: () =>
+            document.querySelector(
+                'button[aria-label="Send"], button[type="submit"]'
+            ),
         fillInput: (input, text) => {
             input.focus();
             input.innerHTML = `<p>${text}</p>`;
@@ -65,7 +75,10 @@ const Providers = {
 function getProvider() {
     const hostname = window.location.hostname;
     // Iterate keys and check if hostname includes the key
-    return Object.keys(Providers).reduce((found, key) => hostname.includes(key) ? Providers[key] : found, null);
+    return Object.keys(Providers).reduce(
+        (found, key) => (hostname.includes(key) ? Providers[key] : found),
+        null
+    );
 }
 
 async function injectPrompt() {
@@ -80,8 +93,13 @@ async function injectPrompt() {
 
     const provider = getProvider();
     if (!provider) {
-        // Only log if we expect to find a provider but didn't (silent fail is okay for generally unsupported sites, but this script only runs on matches)
-        console.warn('AI Summarizer: No provider match found for', window.location.hostname);
+        // Only log if we expect to find a provider but didn't (silent fail is
+        // okay for generally unsupported sites, but this script only runs on
+        // matches)
+        console.warn(
+            'AI Summarizer: No provider match found for',
+            window.location.hostname
+        );
         return;
     }
 
@@ -107,7 +125,8 @@ async function injectPrompt() {
     // Wait for button to become ready
     let sendButton = provider.getSubmitButton();
     let buttonRetries = 0;
-    while (!sendButton && buttonRetries < 15) { // Slightly more retries for button state
+    while (!sendButton && buttonRetries < 15) {
+        // Slightly more retries for button state
         await new Promise(r => setTimeout(r, 500));
         sendButton = provider.getSubmitButton();
         buttonRetries++;
