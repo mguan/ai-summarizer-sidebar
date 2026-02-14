@@ -25,7 +25,9 @@ function loadSettings() {
     return new Promise((resolve) => {
         chrome.storage.local.get([KEY_PROVIDER, KEY_CUSTOM_PROMPTS], (result) => {
             state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
-            state.prompts = result[KEY_CUSTOM_PROMPTS] || [];
+            state.prompts = (result[KEY_CUSTOM_PROMPTS] || []).sort(
+                (a, b) => b.pattern.length - a.pattern.length
+            );
             resolve();
         });
     });
@@ -45,7 +47,9 @@ function setupEventListeners() {
         if (area !== 'local') return;
 
         if (changes[KEY_CUSTOM_PROMPTS]) {
-            state.prompts = changes[KEY_CUSTOM_PROMPTS].newValue;
+            state.prompts = (changes[KEY_CUSTOM_PROMPTS].newValue || []).sort(
+                (a, b) => b.pattern.length - a.pattern.length
+            );
         }
 
         if (changes[KEY_PROVIDER]) {
@@ -102,11 +106,7 @@ function calculateTargetUrl(url) {
 function findMatchingPrompt(url) {
     if (!state.prompts || state.prompts.length === 0) return null;
 
-    // Sort by pattern length (longest first) for specificity
-    const sortedPrompts = [...state.prompts].sort(
-        (a, b) => b.pattern.length - a.pattern.length
-    );
-    return sortedPrompts.find(item => isUrlMatch(url, item.pattern)) || null;
+    return state.prompts.find(item => isUrlMatch(url, item.pattern)) || null;
 }
 
 function isUrlMatch(url, pattern) {
