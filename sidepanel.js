@@ -66,7 +66,7 @@ function updateIframeContentFromUrl(url) {
     const targetUrl = calculateTargetUrl(url);
 
     const iframe = document.getElementById('content-frame');
-    if (iframe && iframe.src !== targetUrl) {
+    if (iframe.src !== targetUrl) {
         iframe.src = targetUrl;
     }
 }

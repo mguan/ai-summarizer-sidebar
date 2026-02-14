@@ -47,7 +47,7 @@ chrome.declarativeNetRequest.updateDynamicRules({
 // Initialize default settings on install
 chrome.runtime.onInstalled.addListener((details) => {
     chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER], (result) => {
-        if (!result[KEY_CUSTOM_PROMPTS] && typeof DEFAULT_PROMPTS !== 'undefined') {
+        if (!result[KEY_CUSTOM_PROMPTS]) {
             chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: DEFAULT_PROMPTS });
         }
         if (!result[KEY_PROVIDER]) {

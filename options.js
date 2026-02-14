@@ -37,9 +37,7 @@ function init() {
         renderPromptsSelect();
         updateEditMode('new');
 
-        if (elements.providerSelect) {
-            elements.providerSelect.value = state.provider;
-        }
+        elements.providerSelect.value = state.provider;
     });
 
     setupEventListeners();
@@ -48,9 +46,7 @@ function init() {
 function setupEventListeners() {
     elements.promptSelect.addEventListener('change', handlePromptSelectChange);
 
-    if (elements.providerSelect) {
-        elements.providerSelect.addEventListener('change', handleProviderChange);
-    }
+    elements.providerSelect.addEventListener('change', handleProviderChange);
 
     elements.saveEditBtn.addEventListener('click', savePrompt);
     elements.deletePromptBtn.addEventListener('click', deletePrompt);
