@@ -1,16 +1,17 @@
-import { DEFAULT_PROMPTS, DEFAULT_PROVIDER, KEY_CUSTOM_PROMPTS, KEY_PROVIDER, MSG_UPDATE_CONTENT } from './constants.js';
+import {
+    DEFAULT_PROMPTS,
+    DEFAULT_PROVIDER,
+    KEY_CUSTOM_PROMPTS,
+    KEY_PROVIDER,
+    MSG_UPDATE_CONTENT,
+    PROVIDER_URLS,
+} from './constants.js';
 
 // Open side panel on icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
 // Modify headers to allow embedding
 const EXTENSION_ORIGIN = 'chrome-extension://' + chrome.runtime.id;
-const AI_DOMAINS = [
-    'chatgpt\\.com',
-    'claude\\.ai',
-    'gemini\\.google\\.com',
-    'grok\\.com',
-];
 
 const RULES = [
     {
@@ -25,7 +26,7 @@ const RULES = [
         },
         condition: {
             // Match supported AI providers
-            regexFilter: `^https://(${AI_DOMAINS.join('|')})/.*`,
+            regexFilter: `^(${Object.values(PROVIDER_URLS).map(url => url.replaceAll('.', '\\.')).join('|')}).*`,
             resourceTypes: ['sub_frame'],
         },
     }
