@@ -17,9 +17,9 @@ Language: Use the same language as the content.
 Video: {{URL}}`;
 
 export const DEFAULT_PROMPTS = [
-    { pattern: "*", prompt: GENERIC_PROMPT },
-    { pattern: "*youtube.com/watch*", prompt: YOUTUBE_PROMPT },
-    { pattern: "*youtu.be/*", prompt: YOUTUBE_PROMPT }
+    { pattern: '*', prompt: GENERIC_PROMPT },
+    { pattern: '*youtube.com/watch*', prompt: YOUTUBE_PROMPT },
+    { pattern: '*youtu.be/*', prompt: YOUTUBE_PROMPT },
 ];
 
 export const DEFAULT_PROVIDER = 'gemini';
@@ -28,7 +28,7 @@ export const PROVIDER_URLS = {
     'chatgpt': 'https://chatgpt.com',
     'claude': 'https://claude.ai/new',
     'gemini': 'https://gemini.google.com/app',
-    'grok': 'https://grok.com'
+    'grok': 'https://grok.com',
 };
 
 // KEY_CUSTOM_PROMPTS and KEY_AUTO_SUBMIT are also defined in injector.js

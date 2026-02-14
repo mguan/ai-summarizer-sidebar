@@ -12,7 +12,7 @@ const Providers = {
             input.focus();
             input.innerHTML = text;
             input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
+        },
     },
     'claude.ai': {
         getInput: () => document.querySelector('div[contenteditable="true"].ProseMirror'),
@@ -21,7 +21,7 @@ const Providers = {
             input.focus();
             input.innerHTML = text;
             input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
+        },
     },
     'gemini.google.com': {
         getInput: () => {
@@ -30,7 +30,7 @@ const Providers = {
                 'div[role="textbox"][contenteditable="true"]',
                 'div[aria-label*="Enter a prompt"]',
                 '.input-area div[contenteditable="true"]',
-                'textarea'
+                'textarea',
             ];
             return selectors.map(s => document.querySelector(s)).find(el => el) || null;
         },
@@ -39,7 +39,7 @@ const Providers = {
                 'button[aria-label="Send message"]',
                 'button[aria-label*="Send"]',
                 'button[aria-label*="Submit"]',
-                '.send-button'
+                '.send-button',
             ];
             // Helper to check if button is enabled
             const isEnabled = (btn) => btn && !btn.hasAttribute('disabled') && btn.getAttribute('aria-disabled') !== 'true';
@@ -49,7 +49,7 @@ const Providers = {
             input.focus();
             document.execCommand('insertText', false, text); // Gemini specific legacy support
             input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
+        },
     },
     'grok.com': {
         getInput: () => document.querySelector('.tiptap.ProseMirror'),
@@ -58,8 +58,8 @@ const Providers = {
             input.focus();
             input.innerHTML = `<p>${text}</p>`;
             input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-    }
+        },
+    },
 };
 
 function getProvider() {
@@ -81,7 +81,7 @@ async function injectPrompt() {
     const provider = getProvider();
     if (!provider) {
         // Only log if we expect to find a provider but didn't (silent fail is okay for generally unsupported sites, but this script only runs on matches)
-        console.warn("AI Summarizer: No provider match found for", window.location.hostname);
+        console.warn('AI Summarizer: No provider match found for', window.location.hostname);
         return;
     }
 
@@ -94,27 +94,28 @@ async function injectPrompt() {
         retries++;
     }
 
-    if (inputField) {
-        window.hasInjectedPrompt = true;
-        provider.fillInput(inputField, promptText);
+    if (!inputField) {
+        console.warn('AI Summarizer: Could not find input field.');
+        return;
+    }
 
-        if (autoSubmit) {
-            // Wait for button to become ready
-            let sendButton = provider.getSubmitButton();
-            let buttonRetries = 0;
-            while (!sendButton && buttonRetries < 15) { // Slightly more retries for button state
-                await new Promise(r => setTimeout(r, 500));
-                sendButton = provider.getSubmitButton();
-                buttonRetries++;
-            }
+    window.hasInjectedPrompt = true;
+    provider.fillInput(inputField, promptText);
 
-            if (sendButton) {
-                // Small delay to ensure UI is interactive
-                setTimeout(() => sendButton.click(), 300);
-            }
-        }
-    } else {
-        console.warn("AI Summarizer: Could not find input field.");
+    if (!autoSubmit) return;
+
+    // Wait for button to become ready
+    let sendButton = provider.getSubmitButton();
+    let buttonRetries = 0;
+    while (!sendButton && buttonRetries < 15) { // Slightly more retries for button state
+        await new Promise(r => setTimeout(r, 500));
+        sendButton = provider.getSubmitButton();
+        buttonRetries++;
+    }
+
+    if (sendButton) {
+        // Small delay to ensure UI is interactive
+        setTimeout(() => sendButton.click(), 300);
     }
 }
 

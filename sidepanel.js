@@ -1,4 +1,11 @@
-import { DEFAULT_PROVIDER, PROVIDER_URLS, KEY_CUSTOM_PROMPTS, KEY_PROVIDER, KEY_AUTO_SUBMIT, MSG_UPDATE_CONTENT } from './constants.js';
+import {
+    DEFAULT_PROVIDER,
+    PROVIDER_URLS,
+    KEY_CUSTOM_PROMPTS,
+    KEY_PROVIDER,
+    KEY_AUTO_SUBMIT,
+    MSG_UPDATE_CONTENT,
+} from './constants.js';
 // --- State ---
 const state = {
     provider: DEFAULT_PROVIDER,
@@ -80,8 +87,15 @@ function calculateTargetUrl(url) {
     // If pattern is '*', do not auto-submit. Otherwise, auto-submit.
     const autoSubmit = match.pattern !== '*';
 
-    const separator = baseUrl.includes('?') ? '&' : '?';
-    return `${baseUrl}${separator}${KEY_CUSTOM_PROMPTS}=${encodeURIComponent(finalPrompt)}&${KEY_AUTO_SUBMIT}=${autoSubmit}`;
+    try {
+        const targetUrl = new URL(baseUrl);
+        targetUrl.searchParams.set(KEY_CUSTOM_PROMPTS, finalPrompt);
+        targetUrl.searchParams.set(KEY_AUTO_SUBMIT, autoSubmit.toString());
+        return targetUrl.toString();
+    } catch (e) {
+        console.error('Invalid base URL:', baseUrl, e);
+        return baseUrl;
+    }
 }
 
 function findMatchingPrompt(url) {

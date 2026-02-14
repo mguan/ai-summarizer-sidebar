@@ -6,10 +6,10 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 // Modify headers to allow embedding
 const EXTENSION_ORIGIN = 'chrome-extension://' + chrome.runtime.id;
 const AI_DOMAINS = [
-    "chatgpt\\.com",
-    "claude\\.ai",
-    "gemini\\.google\\.com",
-    "grok\\.com"
+    'chatgpt\\.com',
+    'claude\\.ai',
+    'gemini\\.google\\.com',
+    'grok\\.com',
 ];
 
 const RULES = [
@@ -17,17 +17,17 @@ const RULES = [
         id: 1,
         priority: 1,
         action: {
-            type: "modifyHeaders",
+            type: 'modifyHeaders',
             responseHeaders: [
-                { header: "X-Frame-Options", operation: "remove" },
-                { header: "content-security-policy", operation: "set", value: `frame-ancestors 'self' ${EXTENSION_ORIGIN}` }
-            ]
+                { header: 'X-Frame-Options', operation: 'remove' },
+                { header: 'content-security-policy', operation: 'set', value: `frame-ancestors 'self' ${EXTENSION_ORIGIN}` },
+            ],
         },
         condition: {
             // Match supported AI providers
             regexFilter: `^https://(${AI_DOMAINS.join('|')})/.*`,
-            resourceTypes: ["sub_frame"]
-        }
+            resourceTypes: ['sub_frame'],
+        },
     }
 ];
 
@@ -55,7 +55,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             type: MSG_UPDATE_CONTENT,
             url: tab.url
         }).catch((error) => {
-            // Suppress error if side panel is closed (no receiver), which is expected behavior
+            // Suppress error if side panel is closed (no receiver), which is expected behavior.
+            // However, we log it for debugging purposes if it's something else.
+            if (error.message !== 'The message port closed before a response was received.') {
+                console.debug('Background script message error:', error);
+            }
         });
     }
 });

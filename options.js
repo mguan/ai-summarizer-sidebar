@@ -1,4 +1,9 @@
-import { DEFAULT_PROMPTS, DEFAULT_PROVIDER, KEY_CUSTOM_PROMPTS, KEY_PROVIDER } from './constants.js';
+import {
+    DEFAULT_PROMPTS,
+    DEFAULT_PROVIDER,
+    KEY_CUSTOM_PROMPTS,
+    KEY_PROVIDER,
+} from './constants.js';
 
 const elements = {
     promptSelect: document.getElementById('prompt-select'),
@@ -10,13 +15,13 @@ const elements = {
     resetAllBtn: document.getElementById('reset-all-btn'),
     resetPromptBtn: document.getElementById('reset-prompt-btn'),
     statusIndicator: document.getElementById('status-indicator'),
-    providerSelect: document.getElementById('provider-select')
+    providerSelect: document.getElementById('provider-select'),
 };
 
 
-let state = {
+const state = {
     prompts: [],
-    provider: DEFAULT_PROVIDER
+    provider: DEFAULT_PROVIDER,
 };
 
 // Initialize
@@ -30,7 +35,7 @@ function init() {
         }
 
         renderPromptsSelect();
-        updateEditMode("new");
+        updateEditMode('new');
 
         if (elements.providerSelect) {
             elements.providerSelect.value = state.provider;
@@ -85,7 +90,7 @@ function updateEditMode(value) {
     }
 
     elements.editPattern.readOnly = false;
-    elements.saveEditBtn.textContent = isNew ? "Add Pattern" : "Update Pattern";
+    elements.saveEditBtn.textContent = isNew ? 'Add Pattern' : 'Update Pattern';
 
     toggleVisibility(elements.deletePromptBtn, !isNew);
 
@@ -157,7 +162,7 @@ function deletePrompt() {
     if (pattern === 'new' || !confirm(`Delete prompt for "${pattern}"?`)) return;
 
     state.prompts = state.prompts.filter(p => p.pattern !== pattern);
-    saveAndRefresh("Prompt deleted!", "new");
+    saveAndRefresh('Prompt deleted!', 'new');
 }
 
 function resetCurrentPrompt() {
@@ -172,10 +177,10 @@ function resetCurrentPrompt() {
 }
 
 function resetAll() {
-    if (!confirm("Reset ALL prompts to defaults?")) return;
+    if (!confirm('Reset ALL prompts to defaults?')) return;
 
     state.prompts = [...DEFAULT_PROMPTS];
-    saveAndRefresh("Defaults restored!", "new");
+    saveAndRefresh('Defaults restored!', 'new');
 }
 
 function saveAndRefresh(message, nextSelection) {
@@ -189,15 +194,15 @@ function saveAndRefresh(message, nextSelection) {
 
 // Status Indicator Logic
 function setDirty() {
-    if (elements.statusIndicator.textContent !== "Unsaved changes...") {
-        elements.statusIndicator.textContent = "Unsaved changes...";
-        elements.statusIndicator.className = "status-bar status-dirty";
+    if (elements.statusIndicator.textContent !== 'Unsaved changes...') {
+        elements.statusIndicator.textContent = 'Unsaved changes...';
+        elements.statusIndicator.className = 'status-bar status-dirty';
     }
 }
 
 function setClean() {
-    elements.statusIndicator.textContent = "";
-    elements.statusIndicator.className = "status-bar";
+    elements.statusIndicator.textContent = '';
+    elements.statusIndicator.className = 'status-bar';
 }
 
 function showStatus(message, type = 'success') {
