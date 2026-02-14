@@ -6,6 +6,7 @@ import {
     MSG_UPDATE_CONTENT,
     PROVIDER_URLS,
 } from './constants.js';
+
 // --- State ---
 const state = {
     provider: DEFAULT_PROVIDER,

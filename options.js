@@ -104,7 +104,7 @@ function renderPromptsSelect() {
 
     elements.promptSelect.innerHTML = '<option value="new">-- Add New Pattern --</option>';
 
-    const sortedPrompts = [...state.prompts].sort((a, b) => a.pattern.localeCompare(b.pattern));
+    const sortedPrompts = [...state.prompts].sort((a, b) => b.pattern.length - a.pattern.length);
 
     sortedPrompts.forEach(item => {
         const option = document.createElement('option');
