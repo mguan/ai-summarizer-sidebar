@@ -25,10 +25,10 @@ export const DEFAULT_PROMPTS = [
 export const DEFAULT_PROVIDER = 'gemini';
 
 export const PROVIDER_URLS = {
-    'chatgpt': 'https://chatgpt.com/?custom_q=',
-    'claude': 'https://claude.ai/new?custom_q=',
-    'gemini': 'https://gemini.google.com/app?custom_q=',
-    'grok': 'https://grok.com/?custom_q='
+    'chatgpt': 'https://chatgpt.com',
+    'claude': 'https://claude.ai/new',
+    'gemini': 'https://gemini.google.com/app',
+    'grok': 'https://grok.com'
 };
 
 export const KEY_CUSTOM_Q = 'custom_q';

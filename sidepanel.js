@@ -80,7 +80,8 @@ function calculateTargetUrl(url) {
     // If pattern is '*', do not auto-submit. Otherwise, auto-submit.
     const autoSubmit = match.pattern !== '*';
 
-    return `${baseUrl}${encodeURIComponent(finalPrompt)}&${KEY_AUTO_SUBMIT}=${autoSubmit}`;
+    const separator = baseUrl.includes('?') ? '&' : '?';
+    return `${baseUrl}${separator}${KEY_CUSTOM_Q}=${encodeURIComponent(finalPrompt)}&${KEY_AUTO_SUBMIT}=${autoSubmit}`;
 }
 
 function findMatchingPrompt(url) {
