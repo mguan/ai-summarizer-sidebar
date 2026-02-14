@@ -4,7 +4,7 @@ A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok)
 
 ## Features
 
--   **Multi-Provider Support:** Seamlessly switch between Anthropic Claude, ChatGPT, Google Gemini, and xAI Grok.
+-   **Multi-Provider Support:** Seamlessly switch between ChatGPT, Claude, Gemini and Grok.
 -   **Smart Context Awareness:** Automatically detects the current page URL and injects it into the AI prompt.
 -   **Customizable Prompts:** distinct prompts for different websites using URL patterns.
     -   *Example:* set a specific prompt for YouTube videos (`*youtube.com*`) to "Summarize this video" and another for generic pages (`*`) to "Summarize this article".
@@ -15,7 +15,7 @@ A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok)
 > [!WARNING]
 > **Security Notice: Header Modification & Embedded Iframes**
 >
-> **How It Works**: This extension functions by embedding AI chat pages (Gemini, ChatGPT, Claude, Grok) directly into the sidebar using an HTML `iframe`. By default, these services send strict security headers (`X-Frame-Options` and `Content-Security-Policy`) to prevent themselves from being embedded anywhere. To make this extension possible, we must **modify these headers** for the specific AI domains to allow framing within the extension.
+> **How It Works**: This extension functions by embedding AI chat pages (ChatGPT, Claude, Gemini, Grok) directly into the sidebar using an HTML `iframe`. By default, these services send strict security headers (`X-Frame-Options` and `Content-Security-Policy`) to prevent themselves from being embedded anywhere. To make this extension possible, we must **modify these headers** for the specific AI domains to allow framing within the extension.
 >
 > **The Risk**: While we restrict framing to **only this extension** (using `frame-ancestors`)—which is much safer than allowing all framing—it still technically relaxes the strict "do not frame" policy of these providers.
 >
@@ -44,7 +44,7 @@ You can configure the extension via the **Options Page**. To access it:
 
 ### Settings Available:
 
--   **Preferred AI Service:** Choose your default AI provider (Gemini, ChatGPT, Claude, or Grok).
+-   **Preferred AI Service:** Choose your default AI provider (ChatGPT, Claude, Gemini or Grok).
 -   **Custom Prompts:** Manage your prompt strategies.
     -   **URL Pattern:** Define where the prompt applies (e.g., `*wikipedia.org*`). Supports wildcards (`*`).
     -   **Prompt Template:** Write your instruction. Use `{{URL}}` as a placeholder for the current page's link.
