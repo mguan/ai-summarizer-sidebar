@@ -38,3 +38,4 @@ export const KEY_AUTO_SUBMIT = 'auto_submit';
 
 
 export const KEY_PROVIDER = 'provider';
+export const MSG_UPDATE_CONTENT = 'update_content';

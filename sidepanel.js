@@ -1,4 +1,4 @@
-import { DEFAULT_PROVIDER, PROVIDER_URLS, KEY_CUSTOM_PROMPTS, KEY_PROVIDER, KEY_AUTO_SUBMIT } from './constants.js';
+import { DEFAULT_PROVIDER, PROVIDER_URLS, KEY_CUSTOM_PROMPTS, KEY_PROVIDER, KEY_AUTO_SUBMIT, MSG_UPDATE_CONTENT } from './constants.js';
 // --- State ---
 const state = {
     provider: DEFAULT_PROVIDER,
@@ -27,7 +27,7 @@ function loadSettings() {
 function setupEventListeners() {
     // Listen for messages from background/content scripts
     chrome.runtime.onMessage.addListener((request) => {
-        if (request.type === "UPDATE_CONTENT") {
+        if (request.type === MSG_UPDATE_CONTENT) {
             updateIframeContentFromUrl(request.url);
         }
     });

@@ -1,4 +1,4 @@
-import { DEFAULT_PROMPTS, DEFAULT_PROVIDER, KEY_CUSTOM_PROMPTS, KEY_PROVIDER } from './constants.js';
+import { DEFAULT_PROMPTS, DEFAULT_PROVIDER, KEY_CUSTOM_PROMPTS, KEY_PROVIDER, MSG_UPDATE_CONTENT } from './constants.js';
 
 // Open side panel on icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
@@ -52,7 +52,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
         chrome.runtime.sendMessage({
-            type: "UPDATE_CONTENT",
+            type: MSG_UPDATE_CONTENT,
             url: tab.url
         }).catch((error) => {
             // Suppress error if side panel is closed (no receiver), which is expected behavior
