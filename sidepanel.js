@@ -1,4 +1,4 @@
-import { DEFAULT_PROVIDER, PROVIDER_URLS } from './constants.js';
+import { DEFAULT_PROVIDER, PROVIDER_URLS, KEY_CUSTOM_PROMPTS, KEY_PROVIDER, KEY_CUSTOM_Q, KEY_AUTO_SUBMIT } from './constants.js';
 // --- State ---
 const state = {
     provider: DEFAULT_PROVIDER,
@@ -15,9 +15,9 @@ function init() {
 
 function loadSettings() {
     return new Promise((resolve) => {
-        chrome.storage.local.get(['provider', 'customPrompts'], (result) => {
-            state.provider = result.provider || DEFAULT_PROVIDER;
-            state.prompts = result.customPrompts || [];
+        chrome.storage.local.get([KEY_PROVIDER, KEY_CUSTOM_PROMPTS], (result) => {
+            state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
+            state.prompts = result[KEY_CUSTOM_PROMPTS] || [];
             resolve();
         });
     });
@@ -36,12 +36,12 @@ function setupEventListeners() {
     chrome.storage.onChanged.addListener((changes, area) => {
         if (area !== 'local') return;
 
-        if (changes.customPrompts) {
-            state.prompts = changes.customPrompts.newValue;
+        if (changes[KEY_CUSTOM_PROMPTS]) {
+            state.prompts = changes[KEY_CUSTOM_PROMPTS].newValue;
         }
 
-        if (changes.provider) {
-            state.provider = changes.provider.newValue;
+        if (changes[KEY_PROVIDER]) {
+            state.provider = changes[KEY_PROVIDER].newValue;
             updateSidePanelContent();
         }
     });
@@ -80,7 +80,7 @@ function calculateTargetUrl(url) {
     // If pattern is '*', do not auto-submit. Otherwise, auto-submit.
     const autoSubmit = match.pattern !== '*';
 
-    return `${baseUrl}${encodeURIComponent(finalPrompt)}&auto_submit=${autoSubmit}`;
+    return `${baseUrl}${encodeURIComponent(finalPrompt)}&${KEY_AUTO_SUBMIT}=${autoSubmit}`;
 }
 
 function findMatchingPrompt(url) {

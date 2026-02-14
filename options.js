@@ -1,4 +1,4 @@
-import { DEFAULT_PROMPTS, DEFAULT_PROVIDER } from './constants.js';
+import { DEFAULT_PROMPTS, DEFAULT_PROVIDER, KEY_CUSTOM_PROMPTS, KEY_PROVIDER } from './constants.js';
 
 const elements = {
     promptSelect: document.getElementById('prompt-select'),
@@ -21,12 +21,12 @@ let state = {
 
 // Initialize
 function init() {
-    chrome.storage.local.get(['customPrompts', 'provider'], (result) => {
-        state.prompts = result.customPrompts || [...DEFAULT_PROMPTS];
-        state.provider = result.provider || DEFAULT_PROVIDER;
+    chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER], (result) => {
+        state.prompts = result[KEY_CUSTOM_PROMPTS] || [...DEFAULT_PROMPTS];
+        state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
 
-        if (!result.customPrompts) {
-            chrome.storage.local.set({ customPrompts: state.prompts });
+        if (!result[KEY_CUSTOM_PROMPTS]) {
+            chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
         }
 
         renderPromptsSelect();
@@ -64,7 +64,7 @@ function handlePromptSelectChange(e) {
 
 function handleProviderChange(e) {
     state.provider = e.target.value;
-    chrome.storage.local.set({ provider: state.provider });
+    chrome.storage.local.set({ [KEY_PROVIDER]: state.provider });
     showStatus('Provider updated!', 'success');
 }
 
@@ -179,7 +179,7 @@ function resetAll() {
 }
 
 function saveAndRefresh(message, nextSelection) {
-    chrome.storage.local.set({ customPrompts: state.prompts });
+    chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
     if (message) showStatus(message, 'success');
 
     renderPromptsSelect();

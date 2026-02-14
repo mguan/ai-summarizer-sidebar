@@ -1,4 +1,4 @@
-import { DEFAULT_PROMPTS, DEFAULT_PROVIDER } from './constants.js';
+import { DEFAULT_PROMPTS, DEFAULT_PROVIDER, KEY_CUSTOM_PROMPTS, KEY_PROVIDER } from './constants.js';
 
 // Open side panel on icon click
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
@@ -38,12 +38,12 @@ chrome.declarativeNetRequest.updateDynamicRules({
 
 // Initialize default settings on install
 chrome.runtime.onInstalled.addListener((details) => {
-    chrome.storage.local.get(['customPrompts', 'provider'], (result) => {
-        if (!result.customPrompts && typeof DEFAULT_PROMPTS !== 'undefined') {
-            chrome.storage.local.set({ customPrompts: DEFAULT_PROMPTS });
+    chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER], (result) => {
+        if (!result[KEY_CUSTOM_PROMPTS] && typeof DEFAULT_PROMPTS !== 'undefined') {
+            chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: DEFAULT_PROMPTS });
         }
-        if (!result.provider) {
-            chrome.storage.local.set({ provider: DEFAULT_PROVIDER });
+        if (!result[KEY_PROVIDER]) {
+            chrome.storage.local.set({ [KEY_PROVIDER]: DEFAULT_PROVIDER });
         }
     });
 });

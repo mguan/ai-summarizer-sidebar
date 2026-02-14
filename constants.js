@@ -30,3 +30,8 @@ export const PROVIDER_URLS = {
     'gemini': 'https://gemini.google.com/app?custom_q=',
     'grok': 'https://grok.com/?custom_q='
 };
+
+export const KEY_CUSTOM_Q = 'custom_q';
+export const KEY_AUTO_SUBMIT = 'auto_submit';
+export const KEY_PROVIDER = 'provider';
+export const KEY_CUSTOM_PROMPTS = 'customPrompts';
