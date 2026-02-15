@@ -1,6 +1,6 @@
 # AI Summarizer Sidebar
 
-A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok) directly into your browser's sidebar. It automatically analyzes and summarizes the webpage or video you are currently viewing using customizable prompts.
+A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok) directly into your browser's sidebar. It automatically summarizes and assigns a bullshit score to the webpage or video you are currently viewing using customizable prompts.
 
 ## Features
 
