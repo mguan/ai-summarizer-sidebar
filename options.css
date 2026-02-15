@@ -37,6 +37,15 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 header {
@@ -63,6 +72,24 @@ section {
 
 section:last-child {
   margin-bottom: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#edit-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#edit-area .form-group:nth-of-type(2) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 h2 {
@@ -118,11 +145,13 @@ textarea:focus {
 }
 
 textarea {
-  min-height: 400px;
+  min-height: 150px;
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-size: 12px;
   line-height: 1.5;
   resize: vertical;
+  flex: 1;
+  height: 100%;
 }
 
 /* Custom Select Arrow */
