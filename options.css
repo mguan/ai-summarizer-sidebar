@@ -64,10 +64,8 @@ h1 {
   color: var(--text-primary);
 }
 
-
-
 section {
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 section:last-child {
