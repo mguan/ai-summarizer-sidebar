@@ -3,6 +3,7 @@
     "name": "AI Summarizer Sidebar",
     "version": "0.24",
     "description": "A Sidebar for analyzing and summarizing any webpage or video using AI.",
+    "homepage_url": "https://github.com/mguan/ai-summarizer-sidebar",
     "permissions": [
         "declarativeNetRequest",
         "sidePanel",

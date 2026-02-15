@@ -316,20 +316,3 @@ input:read-only {
 .help-tooltip li:last-child {
   margin-bottom: 0;
 }
-
-/* Footer Attribution */
-footer {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-footer a {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
