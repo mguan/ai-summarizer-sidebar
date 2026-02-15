@@ -86,7 +86,6 @@ function updateEditMode(value) {
     }
 
     elements.editPattern.readOnly = false;
-    elements.saveEditBtn.textContent = isNew ? 'Add Pattern' : 'Update Pattern';
 
     toggleVisibility(elements.deletePromptBtn, !isNew);
 
