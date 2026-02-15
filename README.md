@@ -48,6 +48,7 @@ You can configure the extension via the **Options Page**. To access it:
 -   **Custom Prompts:** Manage your prompt strategies.
     -   **URL Pattern:** Define where the prompt applies (e.g., `*wikipedia.org*`). Supports wildcards (`*`).
     -   **Prompt Template:** Write your instruction. Use `{{URL}}` as a placeholder for the current page's link.
+    -   **Reset Options:** You can reset individual prompts to their defaults or reset all prompts at once.
     -   **Priority:** The extension uses the *longest matching pattern* for specificity.
 
 ## Usage
