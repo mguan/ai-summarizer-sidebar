@@ -53,6 +53,7 @@ You must generate your output using the same language as the content.`;
 
 export const DEFAULT_PROMPTS = [
   { pattern: '*', prompt: GENERIC_PROMPT },
+  { pattern: '*abcnews.com/Politics*', prompt: GENERIC_PROMPT },
   { pattern: '*cnn.com/20*', prompt: GENERIC_PROMPT },
   { pattern: '*foxnews.com/politics*', prompt: GENERIC_PROMPT },
   { pattern: '*nytimes.com/20*', prompt: GENERIC_PROMPT },
