@@ -6,7 +6,8 @@
 
 ## Installation (2 Mins)
 
-1.  **[Download the latest release](https://github.com/mguan/ai-summarizer-sidebar/releases)** and unzip.
+1.  **[Download the latest release Source code
+(zip)](https://github.com/mguan/ai-summarizer-sidebar/releases)** and unzip.
 2.  Go to `chrome://extensions/` in Chrome and enable **Developer mode** (top right).
 3.  Click **Load unpacked**, select the unzipped folder, and pin the extension.
 
