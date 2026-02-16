@@ -25,7 +25,7 @@
 
 ## Is there a catch?
 
-It's free, but what's the catch? The catch is that even though it is free now, the author may create an advanced version for paid users in the future.
+The only catch is that while it's free now, I might create a paid version with extra features in the future.
 
 ## Troubleshooting
 
