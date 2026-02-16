@@ -1,6 +1,6 @@
 # AI Summarizer Sidebar
 
-**Are you frustrated with the amount of AI crap, intrusive ads, misinformation, and fake news on the web?** If so, use this free, open-source tool to automatically cut through the noise, get to the point, and call out BS.
+**Are you frustrated with the amount of AI slop, intrusive ads, misinformation, and fake news on the web?** If so, use this free, open-source tool to automatically cut through the noise, get to the point, and call out BS.
 
 > **Free • Open Source • Private • No Sign-up Required**
 
