@@ -1,6 +1,6 @@
 # AI Summarizer Sidebar
 
-**Frustrated with AI slop, ads, and misinformation?** Use this free, open-source tool to cut through the noise, get to the point, and call out BS.
+**Frustrated with AI slop, ads, and misinformation one the web?** Use this free, open-source Chrome extension to cut through the noise, get to the point, and call out BS.
 
 > **Free • Open Source • Private • No Sign-up or API Key Required**
 
