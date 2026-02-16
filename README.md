@@ -2,6 +2,10 @@
 
 A Chrome extension that integrates AI assistants (Claude, ChatGPT, Gemini, Grok) directly into your browser's sidebar. It automatically summarizes and assigns a bullshit score to the webpage or video you are currently viewing using customizable prompts.
 
+## Motivation
+
+I was frustrated with the amount of AI slop and misinformation on the web. I built this tool to combat it.
+
 ## Features
 
 -   **Multi-Provider Support:** Seamlessly switch between ChatGPT, Claude, Gemini and Grok.
