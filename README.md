@@ -21,6 +21,7 @@
 *   **Zero Tracking**: We collect **no data**. The extension runs entirely on your device.
 *   **No API Keys**: Works with your existing logged-in accounts (ChatGPT, Claude, Gemini, Grok).
 *   **Smart Context**: Automatically feeds webpage content to the AI for summarization.
+*   **Works with Text & Video**: Useful for analyzing both articles and YouTube videos.
 *   **Customizable**: Right-click the icon -> **Options** to set custom prompts or change your default AI provider.
 
 ## Is there a catch?
