@@ -23,13 +23,11 @@
 *   **Smart Context**: Automatically feeds webpage content to the AI for summarization.
 *   **Customizable**: Right-click the icon -> **Options** to set custom prompts or change your default AI provider.
 
+## Is there a catch?
+
+It's free, but what's the catch? The catch is that even though it is free now, the author may create an advanced version for paid users in the future.
+
 ## Troubleshooting
 
 *   If the AI doesn't load, ensure you are logged into that provider in a normal tab.
 *   If the prompt doesn't inject, try refreshing the page.
-
-<details>
-<summary><b>Technical Note: How it works</b></summary>
-
-This extension embeds AI chat pages directly into the sidebar using an `iframe`. To enable this, we securely modify `X-Frame-Options` and `Content-Security-Policy` headers for these specific domains *only within the sidebar context*.
-</details>
