@@ -13,8 +13,7 @@
 ## Usage
 
 1.  **Open the Side Panel** by clicking the extension icon.
-2.  **Navigate to any webpage** to automatically load your AI provider.
-3.  The extension will **construct, inject, and send** the prompt based on the URL pattern.
+2.  **Navigate to any webpage** and the extension will **construct, inject, and send** the prompt based on the URL pattern.
 
 ## Key Features & Privacy
 
