@@ -10,6 +10,12 @@
 2.  Go to `chrome://extensions/` in Chrome and enable **Developer mode** (top right).
 3.  Click **Load unpacked**, select the unzipped folder, and pin the extension.
 
+## Usage
+
+1.  **Open the Side Panel** by clicking the extension icon.
+2.  **Navigate to any webpage** to automatically load your AI provider.
+3.  The extension will **construct, inject, and send** the prompt based on the URL pattern.
+
 ## Key Features & Privacy
 
 *   **Zero Tracking**: We collect **no data**. The extension runs entirely on your device.
