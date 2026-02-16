@@ -2,7 +2,7 @@
 
 **Are you frustrated with the amount of AI slop, intrusive ads, misinformation, and fake news on the web?** If so, use this free, open-source tool to automatically cut through the noise, get to the point, and call out BS.
 
-> **Free • Open Source • Private • No Sign-up Required**
+> **Free • Open Source • Private • No Sign-up or API Key Required**
 
 ## Installation (Takes 2 Minutes)
 
@@ -18,6 +18,7 @@
 *   **Zero Tracking**: We collect **no data**. The extension runs entirely on your device.
 *   **Direct Connection**: When you open the sidebar, the extension sends *only* the current tab's URL to the AI provider you select.
 *   **No new accounts**: You log in directly to the AI provider (e.g. ChatGPT). We never see your password.
+*   **No API Keys**: Works with your existing free account (e.g. ChatGPT Free, Gemini). No API keys or paid subscriptions required.
 
 ## Features
 
