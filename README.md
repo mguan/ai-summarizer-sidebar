@@ -14,7 +14,7 @@
 ## Usage
 
 1.  **Open the Side Panel** by clicking the extension icon.
-2.  **Navigate to any webpage** and the extension will send the prompt based on the URL pattern and get the response.
+2.  **Navigate to any webpage**. The extension constructs a prompt. If the URL is configured, it automatically sends the prompt and gets the response.
 
 ## Key Features & Privacy
 
