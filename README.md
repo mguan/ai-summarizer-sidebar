@@ -6,15 +6,14 @@
 
 ## Installation (2 Mins)
 
-1.  **[Download the latest release Source code
-(zip)](https://github.com/mguan/ai-summarizer-sidebar/releases)** and unzip.
+1.  Download the latest release [Source code (zip)](https://github.com/mguan/ai-summarizer-sidebar/releases) and unzip.
 2.  Go to `chrome://extensions/` in Chrome and enable **Developer mode** (top right).
 3.  Click **Load unpacked**, select the unzipped folder, and pin the extension.
 
 ## Usage
 
-1.  **Open the Side Panel** by clicking the extension icon.
-2.  **Navigate to any webpage**. The extension constructs a prompt. If the URL is configured, it automatically sends the prompt and gets the response.
+1.  Open the Side Panel by clicking the extension icon.
+2.  Navigate to any webpage. The extension constructs a prompt. If the URL is configured, it automatically sends the prompt and gets the response.
 
 ## Key Features & Privacy
 
@@ -25,9 +24,9 @@
 
 ## Is there a catch?
 
-The catch is that while it's free now, I might create a paid version with extra features in the future.
+The catch is that while it is free now, I might create a paid version with extra features in the future.
 
 ## Troubleshooting
 
-*   If the AI doesn't load, ensure you are logged into that provider in a normal tab.
-*   If the prompt doesn't inject, try refreshing the page.
+*   **AI doesn't load**: Ensure you are logged into that provider in a normal tab.
+*   **Prompt doesn't inject**: Try refreshing the page.
