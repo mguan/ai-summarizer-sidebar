@@ -24,7 +24,7 @@
 
 ## Is there a catch?
 
-The catch is that while it is free now, I might create a paid version with extra features in the future.
+Free for now. Paid features may be added later.
 
 ## Troubleshooting
 
