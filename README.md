@@ -20,7 +20,7 @@
 *   **Zero Tracking**: Runs entirely on your device with **no data collection**. The prompt and URL are sent to your AI provider only when summarizing.
 *   **No API Keys**: Works with your existing logged-in accounts (ChatGPT, Claude, Gemini, Grok).
 *   **Works with Text & Video**: Analyzes both articles and YouTube videos (especially effective with Gemini).
-*   **Customizable**: Right-click the icon -> **Options** to set custom prompts or change your default AI provider.
+*   **Customizable**: Right-click the icon -> **Options** to set custom prompts or change AI provider.
 
 ## Is there a catch?
 
