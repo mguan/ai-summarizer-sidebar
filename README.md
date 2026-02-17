@@ -14,19 +14,18 @@
 ## Usage
 
 1.  **Open the Side Panel** by clicking the extension icon.
-2.  **Navigate to any webpage** and the extension will **construct, inject, and send** the prompt based on the URL pattern.
+2.  **Navigate to any webpage** and the extension will send the prompt based on the URL pattern and get the response.
 
 ## Key Features & Privacy
 
-*   **Zero Tracking**: We collect **no data**. The extension runs entirely on your device.
+*   **Zero Tracking**: The extension runs entirely on your device and collects **no data**.
 *   **No API Keys**: Works with your existing logged-in accounts (ChatGPT, Claude, Gemini, Grok).
-*   **Smart Context**: Automatically feeds webpage content to the AI for summarization.
-*   **Works with Text & Video**: Useful for analyzing both articles and YouTube videos.
+*   **Works with Text & Video**: Analyzes both articles and YouTube videos (especially effective with Gemini).
 *   **Customizable**: Right-click the icon -> **Options** to set custom prompts or change your default AI provider.
 
 ## Is there a catch?
 
-The only catch is that while it's free now, I might create a paid version with extra features in the future.
+The catch is that while it's free now, I might create a paid version with extra features in the future.
 
 ## Troubleshooting
 
