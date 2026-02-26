@@ -3,6 +3,8 @@ import {
     DEFAULT_PROVIDER,
     KEY_CUSTOM_PROMPTS,
     KEY_PROVIDER,
+    TEXT_PROMPT,
+    VIDEO_PROMPT,
 } from './constants.js';
 import { sortPromptsByPatternLength } from './utils.js';
 
@@ -16,9 +18,9 @@ const elements = {
     saveEditBtn: document.getElementById('save-edit-btn'),
     deletePromptBtn: document.getElementById('delete-prompt-btn'),
     resetAllBtn: document.getElementById('reset-all-btn'),
-    defaultPromptBtn: document.getElementById('default-prompt-btn'),
     statusIndicator: document.getElementById('status-indicator'),
     providerSelect: document.getElementById('provider-select'),
+    templateSelect: document.getElementById('template-select'),
 };
 
 
@@ -53,8 +55,9 @@ function setupEventListeners() {
 
     elements.saveEditBtn.addEventListener('click', savePrompt);
     elements.deletePromptBtn.addEventListener('click', deletePrompt);
-    elements.defaultPromptBtn.addEventListener('click', defaultPrompt);
     elements.resetAllBtn.addEventListener('click', resetAll);
+
+    elements.templateSelect.addEventListener('change', handleTemplateSelectChange);
 
     // Dirty state tracking
     elements.editPattern.addEventListener('input', () => setStatus('URL pattern changed (unsaved)...', STATUS.DIRTY));
@@ -64,6 +67,14 @@ function setupEventListeners() {
 // Event Handlers
 function handlePromptSelectChange(e) {
     updateEditMode(e.target.value);
+}
+
+function handleTemplateSelectChange(e) {
+    const value = e.target.value;
+    if (!value) return;
+    elements.editPromptText.value = value === 'video' ? VIDEO_PROMPT : TEXT_PROMPT;
+    e.target.value = '';
+    setStatus('Template loaded (unsaved)...', STATUS.DIRTY);
 }
 
 function handleProviderChange(e) {
@@ -91,9 +102,6 @@ function updateEditMode(value) {
     elements.editPattern.readOnly = false;
 
     toggleVisibility(elements.deletePromptBtn, !isNew);
-
-    const isDefault = !isNew && DEFAULT_PROMPTS.some(p => p.pattern === value);
-    toggleVisibility(elements.defaultPromptBtn, isDefault);
 }
 
 function toggleVisibility(element, isVisible) {
@@ -164,15 +172,6 @@ function deletePrompt() {
     saveAndRefresh('Prompt deleted!', 'new');
 }
 
-function defaultPrompt() {
-    const pattern = elements.promptSelect.value;
-    const defaultObj = DEFAULT_PROMPTS.find(p => p.pattern === pattern);
-
-    if (!defaultObj) return;
-
-    elements.editPromptText.value = defaultObj.prompt;
-    setStatus("Prompt reset to default (unsaved)...", STATUS.DIRTY);
-}
 
 function resetAll() {
     if (!confirm('Reset ALL prompts to defaults?')) return;

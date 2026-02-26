@@ -56,7 +56,14 @@
                         <input type="text" id="edit-pattern" placeholder="e.g. *wikipedia.org* or *youtube.com*">
                     </div>
                     <div class="form-group">
-                        <label class="sub-label">Prompt Template</label>
+                        <div class="label-row">
+                            <label class="sub-label sub-label-inline">Prompt Template</label>
+                            <select id="template-select" class="template-select">
+                                <option value="">Load template...</option>
+                                <option value="text">Text Prompt</option>
+                                <option value="video">Video Prompt</option>
+                            </select>
+                        </div>
                         <textarea id="edit-prompt-text" placeholder="Enter instructions for the AI..."></textarea>
                     </div>
                     <div class="flex-between">
@@ -64,8 +71,6 @@
                         <div class="btn-group">
                             <button id="reset-all-btn" class="btn-secondary">Reset All</button>
                             <button id="delete-prompt-btn" class="btn-secondary hidden">Delete</button>
-                            <button id="default-prompt-btn" class="btn-secondary hidden">Default
-                                Prompt</button>
                             <button id="save-edit-btn" class="btn-primary">Save</button>
                         </div>
                     </div>
