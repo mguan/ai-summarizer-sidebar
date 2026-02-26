@@ -1,10 +1,20 @@
-const KEY_CUSTOM_PROMPTS = 'custom_prompts';
-const KEY_AUTO_SUBMIT = 'auto_submit';
+let KEY_CUSTOM_PROMPTS = 'custom_prompts';
+let KEY_AUTO_SUBMIT = 'auto_submit';
 
 const RETRY_INTERVAL_MS = 500;
 const INPUT_MAX_RETRIES = 10;
 const BUTTON_MAX_RETRIES = 15;
 const SUBMIT_DELAY_MS = 300;
+
+async function loadSharedKeys() {
+    try {
+        const constants = await import(chrome.runtime.getURL('constants.js'));
+        KEY_CUSTOM_PROMPTS = constants.KEY_CUSTOM_PROMPTS || KEY_CUSTOM_PROMPTS;
+        KEY_AUTO_SUBMIT = constants.KEY_AUTO_SUBMIT || KEY_AUTO_SUBMIT;
+    } catch (error) {
+        console.warn('AI Summarizer: Failed to load shared keys, using defaults.', error);
+    }
+}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -160,8 +170,6 @@ function debounce(func, wait) {
     };
 }
 
-injectPrompt();
-
 const debouncedInject = debounce(injectPrompt, 500);
 const observer = new MutationObserver(() => {
     if (!window.hasInjectedPrompt) {
@@ -169,4 +177,10 @@ const observer = new MutationObserver(() => {
     }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+async function init() {
+    await loadSharedKeys();
+    injectPrompt();
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+init();

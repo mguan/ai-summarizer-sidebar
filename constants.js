@@ -70,8 +70,6 @@ export const PROVIDER_URLS = {
   'grok': 'https://grok.com',
 };
 
-// KEY_CUSTOM_PROMPTS and KEY_AUTO_SUBMIT are also defined in injector.js
-// If you modify these, be sure to modify them in injector.js as well.
 export const KEY_CUSTOM_PROMPTS = 'custom_prompts';
 export const KEY_AUTO_SUBMIT = 'auto_submit';
 
