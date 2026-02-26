@@ -61,7 +61,6 @@ h1 {
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: var(--text-primary);
 }
 
 section {
@@ -95,7 +94,6 @@ h2 {
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 12px;
-  color: var(--text-primary);
 }
 
 .form-group {
@@ -107,7 +105,6 @@ label {
   font-size: 13px;
   font-weight: 500;
   margin-bottom: 6px;
-  color: var(--text-primary);
 }
 
 .sub-label {
@@ -153,7 +150,6 @@ textarea {
   line-height: 1.5;
   resize: vertical;
   flex: 1;
-  height: 100%;
 }
 
 /* Custom Select Arrow */
@@ -200,7 +196,6 @@ button {
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
-  border: 1px solid transparent;
 }
 
 .btn-primary:hover {
@@ -285,7 +280,6 @@ input:read-only {
   color: #9ca3af;
   cursor: not-allowed;
 }
-
 
 
 /* Help Icon & Tooltip */
