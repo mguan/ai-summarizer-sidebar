@@ -6,7 +6,7 @@ import {
     MSG_UPDATE_CONTENT,
     PROVIDER_URLS,
 } from './constants.js';
-import { isUrlMatchGlob, sortPromptsByPatternLength } from './utils.js';
+import { sortPromptsByPatternLength } from './utils.js';
 
 // --- State ---
 const state = {
@@ -69,9 +69,9 @@ function updateIframeContentFromUrl(url) {
 }
 
 function calculateTargetUrl(url) {
-    const baseUrl = getBaseUrl();
+    const baseUrl = PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER];
 
-    if (!isValidHttpUrl(url)) {
+    if (!(url && url.startsWith('http'))) {
         return baseUrl;
     }
 
@@ -96,16 +96,12 @@ function calculateTargetUrl(url) {
 }
 
 function findMatchingPrompt(url) {
-    return state.prompts.find(item => isUrlMatchGlob(url, item.pattern)) ?? null;
-}
-
-// --- Utilities ---
-function isValidHttpUrl(url) {
-    return url && url.startsWith('http');
-}
-
-function getBaseUrl() {
-    return PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER];
+    return state.prompts.find(item => {
+        const regexString = '^' + item.pattern.split('*')
+            .map(p => p.replace(/[.+?^${}()|[\\]\\\\]/g, '\\\\$&'))
+            .join('.*') + '$';
+        return new RegExp(regexString).test(url);
+    }) ?? null;
 }
 
 // --- Start ---
