@@ -71,9 +71,7 @@ function updateIframeContentFromUrl(url) {
 function calculateTargetUrl(url) {
     const baseUrl = PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER];
 
-    if (!(url && url.startsWith('http'))) {
-        return baseUrl;
-    }
+    if (!url?.startsWith('http')) return baseUrl;
 
     const match = findMatchingPrompt(url);
     if (!match) {
@@ -95,13 +93,13 @@ function calculateTargetUrl(url) {
     }
 }
 
+function globToRegex(pattern) {
+    const parts = pattern.split('*').map(p => p.replace(/[.+?^${}()|[\]\\]/g, '\\$&'));
+    return new RegExp('^' + parts.join('.*') + '$');
+}
+
 function findMatchingPrompt(url) {
-    return state.prompts.find(item => {
-        const regexString = '^' + item.pattern.split('*')
-            .map(p => p.replace(/[.+?^${}()|[\\]\\\\]/g, '\\\\$&'))
-            .join('.*') + '$';
-        return new RegExp(regexString).test(url);
-    }) ?? null;
+    return state.prompts.find(item => globToRegex(item.pattern).test(url)) || null;
 }
 
 // --- Start ---
