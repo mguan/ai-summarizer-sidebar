@@ -6,6 +6,7 @@ import {
     MSG_UPDATE_CONTENT,
     PROVIDER_URLS,
 } from './constants.js';
+import { isUrlMatchGlob, sortPromptsByPatternLength } from './utils.js';
 
 // --- State ---
 const state = {
@@ -25,9 +26,7 @@ function loadSettings() {
     return new Promise((resolve) => {
         chrome.storage.local.get([KEY_PROVIDER, KEY_CUSTOM_PROMPTS], (result) => {
             state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
-            state.prompts = (result[KEY_CUSTOM_PROMPTS] || []).sort(
-                (a, b) => b.pattern.length - a.pattern.length
-            );
+            state.prompts = sortPromptsByPatternLength(result[KEY_CUSTOM_PROMPTS] || []);
             resolve();
         });
     });
@@ -47,9 +46,7 @@ function setupEventListeners() {
         if (area !== 'local') return;
 
         if (changes[KEY_CUSTOM_PROMPTS]) {
-            state.prompts = (changes[KEY_CUSTOM_PROMPTS].newValue || []).sort(
-                (a, b) => b.pattern.length - a.pattern.length
-            );
+            state.prompts = sortPromptsByPatternLength(changes[KEY_CUSTOM_PROMPTS].newValue || []);
         }
 
         if (changes[KEY_PROVIDER]) {
@@ -110,10 +107,7 @@ function findMatchingPrompt(url) {
 }
 
 function isUrlMatch(url, pattern) {
-    // Convert glob pattern (e.g., "example.com/*") to regex
-    const regexString =
-        '^' + pattern.split('*').map(escapeRegex).join('.*') + '$';
-    return new RegExp(regexString).test(url);
+    return isUrlMatchGlob(url, pattern);
 }
 
 // --- Utilities ---
@@ -123,10 +117,6 @@ function isValidHttpUrl(url) {
 
 function getBaseUrl() {
     return PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER];
-}
-
-function escapeRegex(string) {
-    return string.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // --- Start ---

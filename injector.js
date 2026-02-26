@@ -1,88 +1,126 @@
-// Define constants locally to avoid dynamic import. 
-// Since KEY_CUSTOM_PROMPTS and KEY_AUTO_SUBMIT are also defined in constants.js,
-// if you modify these, be sure to also modify them in constants.js.
 const KEY_CUSTOM_PROMPTS = 'custom_prompts';
 const KEY_AUTO_SUBMIT = 'auto_submit';
 
-const Providers = {
+const RETRY_INTERVAL_MS = 500;
+const INPUT_MAX_RETRIES = 10;
+const BUTTON_MAX_RETRIES = 15;
+const SUBMIT_DELAY_MS = 300;
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function findFirst(selectors) {
+    for (const selector of selectors) {
+        const element = document.querySelector(selector);
+        if (element) {
+            return element;
+        }
+    }
+    return null;
+}
+
+function isButtonEnabled(button) {
+    return (
+        !!button &&
+        !button.hasAttribute('disabled') &&
+        button.getAttribute('aria-disabled') !== 'true'
+    );
+}
+
+function findFirstEnabledButton(selectors) {
+    for (const selector of selectors) {
+        const button = document.querySelector(selector);
+        if (isButtonEnabled(button)) {
+            return button;
+        }
+    }
+    return null;
+}
+
+function fillContentEditable(input, text) {
+    input.focus();
+    input.innerHTML = text;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function fillGrokInput(input, text) {
+    input.focus();
+    input.innerHTML = `<p>${text}</p>`;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function fillGeminiInput(input, text) {
+    input.focus();
+    document.execCommand('insertText', false, text);
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+const PROVIDERS = {
     'chatgpt.com': {
-        getInput: () => document.querySelector('#prompt-textarea'),
+        getInput: () => findFirst(['#prompt-textarea']),
         getSubmitButton: () =>
-            document.querySelector(
-                'button[data-testid="send-button"], #composer-submit-button'
-            ),
-        fillInput: (input, text) => {
-            input.focus();
-            input.innerHTML = text;
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-        },
+            findFirst([
+                'button[data-testid="send-button"]',
+                '#composer-submit-button',
+            ]),
+        fillInput: fillContentEditable,
     },
     'claude.ai': {
-        getInput: () => document.querySelector('div[contenteditable="true"].ProseMirror'),
-        getSubmitButton: () => document.querySelector('button[aria-label*="Send"]'),
-        fillInput: (input, text) => {
-            input.focus();
-            input.innerHTML = text;
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-        },
+        getInput: () => findFirst(['div[contenteditable="true"].ProseMirror']),
+        getSubmitButton: () => findFirst(['button[aria-label*="Send"]']),
+        fillInput: fillContentEditable,
     },
     'gemini.google.com': {
-        getInput: () => {
-            const selectors = [
+        getInput: () =>
+            findFirst([
                 'rich-textarea > div[contenteditable="true"]',
                 'div[role="textbox"][contenteditable="true"]',
                 'div[aria-label*="Enter a prompt"]',
                 '.input-area div[contenteditable="true"]',
                 'textarea',
-            ];
-            return selectors.map(s => document.querySelector(s)).find(el => el) || null;
-        },
-        getSubmitButton: () => {
-            const selectors = [
+            ]),
+        getSubmitButton: () =>
+            findFirstEnabledButton([
                 'button[aria-label="Send message"]',
                 'button[aria-label*="Send"]',
                 'button[aria-label*="Submit"]',
                 '.send-button',
-            ];
-            // Helper to check if button is enabled
-            const isEnabled = (btn) =>
-                btn &&
-                !btn.hasAttribute('disabled') &&
-                btn.getAttribute('aria-disabled') !== 'true';
-            return selectors.map(s => document.querySelector(s)).find(isEnabled) ||
-                null;
-        },
-        fillInput: (input, text) => {
-            input.focus();
-            document.execCommand('insertText', false, text); // Gemini specific legacy support
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-        },
+            ]),
+        fillInput: fillGeminiInput,
     },
     'grok.com': {
-        getInput: () => document.querySelector('.tiptap.ProseMirror'),
+        getInput: () => findFirst(['.tiptap.ProseMirror']),
         getSubmitButton: () =>
-            document.querySelector(
-                'button[aria-label="Send"], button[type="submit"]'
-            ),
-        fillInput: (input, text) => {
-            input.focus();
-            input.innerHTML = `<p>${text}</p>`;
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-        },
+            findFirst(['button[aria-label="Send"]', 'button[type="submit"]']),
+        fillInput: fillGrokInput,
     },
 };
 
-function getProvider() {
+function getProviderAdapter() {
     const hostname = window.location.hostname;
-    // Iterate keys and check if hostname includes the key
-    return Object.keys(Providers).reduce(
-        (found, key) => (hostname.includes(key) ? Providers[key] : found),
-        null
-    );
+    for (const [providerHost, adapter] of Object.entries(PROVIDERS)) {
+        if (hostname.includes(providerHost)) {
+            return adapter;
+        }
+    }
+    return null;
+}
+
+async function waitForElement(getElement, maxRetries) {
+    let retries = 0;
+    let element = getElement();
+
+    while (!element && retries < maxRetries) {
+        await sleep(RETRY_INTERVAL_MS);
+        element = getElement();
+        retries += 1;
+    }
+
+    return element;
 }
 
 async function injectPrompt() {
-    // Avoid re-injection if already done
     if (window.hasInjectedPrompt) return;
 
     const params = new URLSearchParams(window.location.search);
@@ -91,27 +129,13 @@ async function injectPrompt() {
 
     if (!promptText) return;
 
-    const provider = getProvider();
+    const provider = getProviderAdapter();
     if (!provider) {
-        // Only log if we expect to find a provider but didn't (silent fail is
-        // okay for generally unsupported sites, but this script only runs on
-        // matches)
-        console.warn(
-            'AI Summarizer: No provider match found for',
-            window.location.hostname
-        );
+        console.warn('AI Summarizer: No provider match found for', window.location.hostname);
         return;
     }
 
-    // Try finding input
-    let inputField = provider.getInput();
-    let retries = 0;
-    while (!inputField && retries < 10) {
-        await new Promise(r => setTimeout(r, 500));
-        inputField = provider.getInput();
-        retries++;
-    }
-
+    const inputField = await waitForElement(provider.getInput, INPUT_MAX_RETRIES);
     if (!inputField) {
         console.warn('AI Summarizer: Could not find input field.');
         return;
@@ -122,41 +146,24 @@ async function injectPrompt() {
 
     if (!autoSubmit) return;
 
-    // Wait for button to become ready
-    let sendButton = provider.getSubmitButton();
-    let buttonRetries = 0;
-    while (!sendButton && buttonRetries < 15) {
-        // Slightly more retries for button state
-        await new Promise(r => setTimeout(r, 500));
-        sendButton = provider.getSubmitButton();
-        buttonRetries++;
-    }
-
+    const sendButton = await waitForElement(provider.getSubmitButton, BUTTON_MAX_RETRIES);
     if (sendButton) {
-        // Small delay to ensure UI is interactive
-        setTimeout(() => sendButton.click(), 300);
+        setTimeout(() => sendButton.click(), SUBMIT_DELAY_MS);
     }
 }
 
-// Run immediately
-injectPrompt();
-
-// Basic debounce implementation
 function debounce(func, wait) {
     let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
+    return function debounced(...args) {
         clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        timeout = setTimeout(() => func(...args), wait);
     };
 }
 
-const debouncedInject = debounce(injectPrompt, 500);
+injectPrompt();
 
-const observer = new MutationObserver((mutations) => {
+const debouncedInject = debounce(injectPrompt, 500);
+const observer = new MutationObserver(() => {
     if (!window.hasInjectedPrompt) {
         debouncedInject();
     }

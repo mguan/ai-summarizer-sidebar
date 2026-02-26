@@ -121,6 +121,10 @@ label {
   font-weight: 600;
 }
 
+.sub-label-inline {
+  margin: 0;
+}
+
 select,
 input[type="text"],
 textarea {
@@ -173,6 +177,10 @@ select {
 .btn-group {
   display: flex;
   gap: 10px;
+}
+
+.hidden {
+  display: none;
 }
 
 button {
@@ -256,6 +264,13 @@ button {
   align-items: center;
 }
 
+.label-row {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
 input:read-only {
   background-color: #f3f4f6;
   color: #9ca3af;
@@ -280,6 +295,10 @@ input:read-only {
   margin-left: 8px;
   position: relative;
   flex-shrink: 0;
+}
+
+.help-icon-tight {
+  margin-left: 6px;
 }
 
 .help-icon:hover {

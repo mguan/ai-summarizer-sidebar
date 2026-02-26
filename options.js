@@ -4,6 +4,7 @@ import {
     KEY_CUSTOM_PROMPTS,
     KEY_PROVIDER,
 } from './constants.js';
+import { sortPromptsByPatternLength } from './utils.js';
 
 const elements = {
     promptSelect: document.getElementById('prompt-select'),
@@ -103,7 +104,7 @@ function renderPromptsSelect() {
 
     elements.promptSelect.innerHTML = '<option value="new">-- Add New Pattern --</option>';
 
-    const sortedPrompts = [...state.prompts].sort((a, b) => b.pattern.length - a.pattern.length);
+    const sortedPrompts = sortPromptsByPatternLength(state.prompts);
 
     sortedPrompts.forEach(item => {
         const option = document.createElement('option');
