@@ -57,8 +57,8 @@ function setupEventListeners() {
     elements.resetAllBtn.addEventListener('click', resetAll);
 
     // Dirty state tracking
-    elements.editPattern.addEventListener('input', () => setDirty());
-    elements.editPromptText.addEventListener('input', () => setDirty());
+    elements.editPattern.addEventListener('input', () => setStatus('Unsaved changes...', STATUS.DIRTY));
+    elements.editPromptText.addEventListener('input', () => setStatus('Unsaved changes...', STATUS.DIRTY));
 }
 
 // Event Handlers
@@ -69,13 +69,13 @@ function handlePromptSelectChange(e) {
 function handleProviderChange(e) {
     state.provider = e.target.value;
     chrome.storage.local.set({ [KEY_PROVIDER]: state.provider });
-    showStatus('Provider updated!', STATUS.SUCCESS);
+    setStatus('Provider updated!', STATUS.SUCCESS, true);
 }
 
 function updateEditMode(value) {
     const isNew = value === 'new';
 
-    setClean(); // Clear dirty state when switching
+    setStatus(); // Clear dirty state when switching
 
     if (isNew) {
         elements.editPattern.value = "";
@@ -134,12 +134,12 @@ function savePrompt() {
     const isNew = originalPattern === 'new';
 
     if (!newPattern || !promptText) {
-        return showStatus('Please enter both a pattern and a prompt.', STATUS.ERROR);
+        return setStatus('Please enter both a pattern and a prompt.', STATUS.ERROR, true);
     }
 
     const exists = state.prompts.some(p => p.pattern === newPattern);
     if (exists && (isNew || newPattern !== originalPattern)) {
-        return showStatus('Pattern already exists! Please choose another.', STATUS.ERROR);
+        return setStatus('Pattern already exists! Please choose another.', STATUS.ERROR, true);
     }
 
     if (isNew) {
@@ -173,7 +173,7 @@ function resetCurrentPrompt() {
         return;
 
     elements.editPromptText.value = defaultObj.prompt;
-    setDirty("Prompt reset to default (unsaved)");
+    setStatus("Prompt reset to default (unsaved)", STATUS.DIRTY);
 }
 
 function resetAll() {
@@ -185,7 +185,7 @@ function resetAll() {
 
 function saveAndRefresh(message, nextSelection) {
     chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
-    if (message) showStatus(message, STATUS.SUCCESS);
+    if (message) setStatus(message, STATUS.SUCCESS, true);
 
     renderPromptsSelect();
     elements.promptSelect.value = nextSelection;
@@ -193,26 +193,19 @@ function saveAndRefresh(message, nextSelection) {
 }
 
 // Status Indicator Logic
-// Use setDirty (not showStatus) for any message that should persist until saved.
-function setDirty(message = 'Unsaved changes...') {
+// Pass timeout=true for transient post-save confirmations (auto-dismisses after 2s).
+// Omit timeout (or pass false) for persistent messages like unsaved state.
+function setStatus(message = '', type = null, timeout = false) {
     elements.statusIndicator.textContent = message;
-    elements.statusIndicator.className = `status-bar status-${STATUS.DIRTY}`;
-}
+    elements.statusIndicator.className = type ? `status-bar status-${type}` : 'status-bar';
 
-function setClean() {
-    elements.statusIndicator.textContent = '';
-    elements.statusIndicator.className = 'status-bar';
-}
-
-function showStatus(message, type = STATUS.SUCCESS) {
-    elements.statusIndicator.textContent = message;
-    elements.statusIndicator.className = `status-bar status-${type}`;
-
-    setTimeout(() => {
-        if (elements.statusIndicator.textContent === message) {
-            setClean();
-        }
-    }, 2000);
+    if (timeout) {
+        setTimeout(() => {
+            if (elements.statusIndicator.textContent === message) {
+                setStatus();
+            }
+        }, 2000);
+    }
 }
 
 init();
