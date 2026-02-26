@@ -70,6 +70,8 @@ export const PROVIDER_URLS = {
   'grok': 'https://grok.com',
 };
 
+// These are also hardcoded in injector.js (content scripts cannot import modules).
+// If you change these values, update injector.js to match.
 export const KEY_CUSTOM_PROMPTS = 'custom_prompts';
 export const KEY_AUTO_SUBMIT = 'auto_submit';
 export const KEY_PROVIDER = 'provider';
