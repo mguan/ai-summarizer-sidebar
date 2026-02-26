@@ -55,8 +55,8 @@ function setupEventListeners() {
     elements.resetAllBtn.addEventListener('click', resetAll);
 
     // Dirty state tracking
-    elements.editPattern.addEventListener('input', setDirty);
-    elements.editPromptText.addEventListener('input', setDirty);
+    elements.editPattern.addEventListener('input', () => setDirty());
+    elements.editPromptText.addEventListener('input', () => setDirty());
 }
 
 // Event Handlers
@@ -171,8 +171,7 @@ function resetCurrentPrompt() {
         return;
 
     elements.editPromptText.value = defaultObj.prompt;
-    setDirty();
-    showStatus("Prompt reset to default (unsaved)", "success");
+    setDirty("Prompt reset to default (unsaved)");
 }
 
 function resetAll() {
@@ -192,11 +191,10 @@ function saveAndRefresh(message, nextSelection) {
 }
 
 // Status Indicator Logic
-function setDirty() {
-    if (elements.statusIndicator.textContent !== 'Unsaved changes...') {
-        elements.statusIndicator.textContent = 'Unsaved changes...';
-        elements.statusIndicator.className = 'status-bar status-dirty';
-    }
+// Use setDirty (not showStatus) for any message that should persist until saved.
+function setDirty(message = 'Unsaved changes...') {
+    elements.statusIndicator.textContent = message;
+    elements.statusIndicator.className = 'status-bar status-dirty';
 }
 
 function setClean() {
