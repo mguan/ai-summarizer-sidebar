@@ -6,6 +6,8 @@ import {
 } from './constants.js';
 import { sortPromptsByPatternLength } from './utils.js';
 
+const STATUS = { SUCCESS: 'success', ERROR: 'error', DIRTY: 'dirty' };
+
 const elements = {
     promptSelect: document.getElementById('prompt-select'),
     editArea: document.getElementById('edit-area'),
@@ -67,7 +69,7 @@ function handlePromptSelectChange(e) {
 function handleProviderChange(e) {
     state.provider = e.target.value;
     chrome.storage.local.set({ [KEY_PROVIDER]: state.provider });
-    showStatus('Provider updated!', 'success');
+    showStatus('Provider updated!', STATUS.SUCCESS);
 }
 
 function updateEditMode(value) {
@@ -132,12 +134,12 @@ function savePrompt() {
     const isNew = originalPattern === 'new';
 
     if (!newPattern || !promptText) {
-        return showStatus('Please enter both a pattern and a prompt.', 'error');
+        return showStatus('Please enter both a pattern and a prompt.', STATUS.ERROR);
     }
 
     const exists = state.prompts.some(p => p.pattern === newPattern);
     if (exists && (isNew || newPattern !== originalPattern)) {
-        return showStatus('Pattern already exists! Please choose another.', 'error');
+        return showStatus('Pattern already exists! Please choose another.', STATUS.ERROR);
     }
 
     if (isNew) {
@@ -183,7 +185,7 @@ function resetAll() {
 
 function saveAndRefresh(message, nextSelection) {
     chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
-    if (message) showStatus(message, 'success');
+    if (message) showStatus(message, STATUS.SUCCESS);
 
     renderPromptsSelect();
     elements.promptSelect.value = nextSelection;
@@ -194,7 +196,7 @@ function saveAndRefresh(message, nextSelection) {
 // Use setDirty (not showStatus) for any message that should persist until saved.
 function setDirty(message = 'Unsaved changes...') {
     elements.statusIndicator.textContent = message;
-    elements.statusIndicator.className = 'status-bar status-dirty';
+    elements.statusIndicator.className = `status-bar status-${STATUS.DIRTY}`;
 }
 
 function setClean() {
@@ -202,7 +204,7 @@ function setClean() {
     elements.statusIndicator.className = 'status-bar';
 }
 
-function showStatus(message, type = 'success') {
+function showStatus(message, type = STATUS.SUCCESS) {
     elements.statusIndicator.textContent = message;
     elements.statusIndicator.className = `status-bar status-${type}`;
 
