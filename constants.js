@@ -1,4 +1,4 @@
-export const GENERIC_PROMPT = `You are an expert investigative journalist and
+export const VIDEO_PROMPT = `You are an expert investigative journalist and
 master of information hygiene. Your goal is to provide a concise summary of the
 content at {{URL}} along with key points. Then, evaluate it for credibility and
 validity by assigning a "bullshit score" based on the following criteria:
@@ -24,6 +24,9 @@ Evaluate the content using the following forensic criteria:
   errors.
 - **Information Density**: Note if a "Gish Gallop" is used to overwhelm the
   audience.
+- **AI Generation Check**: Determine if the video exhibits signs of being 
+  AI-generated (e.g., unnatural movements, distorted hands/text, inconsistent
+  lighting, or smooth but synthetic artifacts).
 - **The "Smell Test"**: A two-sentence verdict on the content's overall
   credibility and underlying vibe.
 
@@ -52,13 +55,13 @@ You must generate your output using the same language as the content.`;
 
 
 export const DEFAULT_PROMPTS = [
-  { pattern: '*', prompt: GENERIC_PROMPT },
-  { pattern: '*abcnews.com/Politics*', prompt: GENERIC_PROMPT },
-  { pattern: '*cnn.com/20*', prompt: GENERIC_PROMPT },
-  { pattern: '*foxnews.com/politics*', prompt: GENERIC_PROMPT },
-  { pattern: '*nytimes.com/20*', prompt: GENERIC_PROMPT },
-  { pattern: '*wenxuecity.com/news/*', prompt: GENERIC_PROMPT },
-  { pattern: '*youtube.com/watch*', prompt: GENERIC_PROMPT },
+  { pattern: '*', prompt: VIDEO_PROMPT },
+  { pattern: '*abcnews.com/Politics*', prompt: VIDEO_PROMPT },
+  { pattern: '*cnn.com/20*', prompt: VIDEO_PROMPT },
+  { pattern: '*foxnews.com/politics*', prompt: VIDEO_PROMPT },
+  { pattern: '*nytimes.com/20*', prompt: VIDEO_PROMPT },
+  { pattern: '*wenxuecity.com/news/*', prompt: VIDEO_PROMPT },
+  { pattern: '*youtube.com/watch*', prompt: VIDEO_PROMPT },
 ];
 
 export const DEFAULT_PROVIDER = 'gemini';
