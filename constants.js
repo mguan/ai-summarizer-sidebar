@@ -72,7 +72,5 @@ export const PROVIDER_URLS = {
 
 export const KEY_CUSTOM_PROMPTS = 'custom_prompts';
 export const KEY_AUTO_SUBMIT = 'auto_submit';
-
-
 export const KEY_PROVIDER = 'provider';
 export const MSG_UPDATE_CONTENT = 'update_content';

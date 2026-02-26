@@ -45,15 +45,12 @@ chrome.declarativeNetRequest.updateDynamicRules({
 });
 
 // Initialize default settings on install
-chrome.runtime.onInstalled.addListener((details) => {
-    chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER], (result) => {
-        if (!result[KEY_CUSTOM_PROMPTS]) {
-            chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: DEFAULT_PROMPTS });
-        }
-        if (!result[KEY_PROVIDER]) {
-            chrome.storage.local.set({ [KEY_PROVIDER]: DEFAULT_PROVIDER });
-        }
-    });
+chrome.runtime.onInstalled.addListener(async () => {
+    const result = await chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER]);
+    const defaults = {};
+    if (!result[KEY_CUSTOM_PROMPTS]) defaults[KEY_CUSTOM_PROMPTS] = DEFAULT_PROMPTS;
+    if (!result[KEY_PROVIDER]) defaults[KEY_PROVIDER] = DEFAULT_PROVIDER;
+    if (Object.keys(defaults).length) chrome.storage.local.set(defaults);
 });
 
 // Detect URL changes to trigger the content update

@@ -15,21 +15,16 @@ const state = {
 };
 
 // --- Initialization ---
-function init() {
-    loadSettings().then(() => {
-        setupEventListeners();
-        updateSidePanelContent();
-    });
+async function init() {
+    await loadSettings();
+    setupEventListeners();
+    updateSidePanelContent();
 }
 
-function loadSettings() {
-    return new Promise((resolve) => {
-        chrome.storage.local.get([KEY_PROVIDER, KEY_CUSTOM_PROMPTS], (result) => {
-            state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
-            state.prompts = sortPromptsByPatternLength(result[KEY_CUSTOM_PROMPTS] || []);
-            resolve();
-        });
-    });
+async function loadSettings() {
+    const result = await chrome.storage.local.get([KEY_PROVIDER, KEY_CUSTOM_PROMPTS]);
+    state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
+    state.prompts = sortPromptsByPatternLength(result[KEY_CUSTOM_PROMPTS] || []);
 }
 
 // --- Event Listeners ---
@@ -101,13 +96,7 @@ function calculateTargetUrl(url) {
 }
 
 function findMatchingPrompt(url) {
-    if (!state.prompts || state.prompts.length === 0) return null;
-
-    return state.prompts.find(item => isUrlMatch(url, item.pattern)) || null;
-}
-
-function isUrlMatch(url, pattern) {
-    return isUrlMatchGlob(url, pattern);
+    return state.prompts.find(item => isUrlMatchGlob(url, item.pattern)) ?? null;
 }
 
 // --- Utilities ---
