@@ -16,7 +16,7 @@ const elements = {
     saveEditBtn: document.getElementById('save-edit-btn'),
     deletePromptBtn: document.getElementById('delete-prompt-btn'),
     resetAllBtn: document.getElementById('reset-all-btn'),
-    resetPromptBtn: document.getElementById('reset-prompt-btn'),
+    defaultPromptBtn: document.getElementById('default-prompt-btn'),
     statusIndicator: document.getElementById('status-indicator'),
     providerSelect: document.getElementById('provider-select'),
 };
@@ -53,7 +53,7 @@ function setupEventListeners() {
 
     elements.saveEditBtn.addEventListener('click', savePrompt);
     elements.deletePromptBtn.addEventListener('click', deletePrompt);
-    elements.resetPromptBtn.addEventListener('click', resetCurrentPrompt);
+    elements.defaultPromptBtn.addEventListener('click', defaultPrompt);
     elements.resetAllBtn.addEventListener('click', resetAll);
 
     // Dirty state tracking
@@ -93,7 +93,7 @@ function updateEditMode(value) {
     toggleVisibility(elements.deletePromptBtn, !isNew);
 
     const isDefault = !isNew && DEFAULT_PROMPTS.some(p => p.pattern === value);
-    toggleVisibility(elements.resetPromptBtn, isDefault);
+    toggleVisibility(elements.defaultPromptBtn, isDefault);
 }
 
 function toggleVisibility(element, isVisible) {
@@ -164,13 +164,11 @@ function deletePrompt() {
     saveAndRefresh('Prompt deleted!', 'new');
 }
 
-function resetCurrentPrompt() {
+function defaultPrompt() {
     const pattern = elements.promptSelect.value;
     const defaultObj = DEFAULT_PROMPTS.find(p => p.pattern === pattern);
 
-    if (!defaultObj ||
-        !confirm(`Reset prompt for "${pattern}" to its default value?`))
-        return;
+    if (!defaultObj) return;
 
     elements.editPromptText.value = defaultObj.prompt;
     setStatus("Prompt reset to default (unsaved)", STATUS.DIRTY);
