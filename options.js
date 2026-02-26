@@ -134,12 +134,12 @@ function savePrompt() {
     const isNew = originalPattern === 'new';
 
     if (!newPattern || !promptText) {
-        return setStatus('Please enter both a pattern and a prompt.', STATUS.ERROR, true);
+        return setStatus('Please enter both a URL pattern and a prompt.', STATUS.ERROR);
     }
 
     const exists = state.prompts.some(p => p.pattern === newPattern);
     if (exists && (isNew || newPattern !== originalPattern)) {
-        return setStatus('Pattern already exists! Please choose another.', STATUS.ERROR, true);
+        return setStatus('URL pattern already exists! Please choose another.', STATUS.ERROR);
     }
 
     if (isNew) {
