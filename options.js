@@ -57,8 +57,8 @@ function setupEventListeners() {
     elements.resetAllBtn.addEventListener('click', resetAll);
 
     // Dirty state tracking
-    elements.editPattern.addEventListener('input', () => setStatus('Unsaved changes...', STATUS.DIRTY));
-    elements.editPromptText.addEventListener('input', () => setStatus('Unsaved changes...', STATUS.DIRTY));
+    elements.editPattern.addEventListener('input', () => setStatus('URL pattern changed (unsaved)...', STATUS.DIRTY));
+    elements.editPromptText.addEventListener('input', () => setStatus('Prompt changed (unsaved)...', STATUS.DIRTY));
 }
 
 // Event Handlers
@@ -171,7 +171,7 @@ function defaultPrompt() {
     if (!defaultObj) return;
 
     elements.editPromptText.value = defaultObj.prompt;
-    setStatus("Prompt reset to default (unsaved)", STATUS.DIRTY);
+    setStatus("Prompt reset to default (unsaved)...", STATUS.DIRTY);
 }
 
 function resetAll() {
