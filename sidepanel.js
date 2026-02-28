@@ -18,6 +18,7 @@ const state = {
 async function init() {
     await loadSettings();
     setupEventListeners();
+    updateActiveTabUI();
     updateSidePanelContent();
 }
 
@@ -46,7 +47,33 @@ function setupEventListeners() {
 
         if (changes[KEY_PROVIDER]) {
             state.provider = changes[KEY_PROVIDER].newValue;
+            updateActiveTabUI();
             updateSidePanelContent();
+        }
+    });
+
+    // Add tab click listeners
+    const tabsContainer = document.getElementById('tabs-container');
+    if (tabsContainer) {
+        tabsContainer.addEventListener('click', (e) => {
+            const tab = e.target.closest('.tab');
+            if (tab) {
+                const newProvider = tab.dataset.provider;
+                if (newProvider && newProvider !== state.provider) {
+                    chrome.storage.local.set({ [KEY_PROVIDER]: newProvider });
+                }
+            }
+        });
+    }
+}
+
+function updateActiveTabUI() {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        if (tab.dataset.provider === state.provider) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
         }
     });
 }
