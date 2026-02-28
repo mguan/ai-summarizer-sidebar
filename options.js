@@ -1,8 +1,6 @@
 import {
     DEFAULT_PROMPTS,
-    DEFAULT_PROVIDER,
     KEY_CUSTOM_PROMPTS,
-    KEY_PROVIDER,
     TEXT_PROMPT,
     VIDEO_PROMPT,
 } from './constants.js';
@@ -20,21 +18,18 @@ const elements = {
     deletePromptBtn: document.getElementById('delete-prompt-btn'),
     resetAllBtn: document.getElementById('reset-all-btn'),
     statusIndicator: document.getElementById('status-indicator'),
-    providerSelect: document.getElementById('provider-select'),
     templateSelect: document.getElementById('template-select'),
 };
 
 
 const state = {
     prompts: [],
-    provider: DEFAULT_PROVIDER,
 };
 
 // Initialize
 function init() {
-    chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER], (result) => {
+    chrome.storage.local.get([KEY_CUSTOM_PROMPTS], (result) => {
         state.prompts = result[KEY_CUSTOM_PROMPTS] || structuredClone(DEFAULT_PROMPTS);
-        state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
 
         if (!result[KEY_CUSTOM_PROMPTS]) {
             chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
@@ -42,15 +37,12 @@ function init() {
 
         renderPromptsSelect();
         updateEditMode('new');
-
-        elements.providerSelect.value = state.provider;
     });
 
     setupEventListeners();
 }
 
 function setupEventListeners() {
-    elements.providerSelect.addEventListener('change', handleProviderChange);
     elements.patternSelect.addEventListener('change', handlePatternSelectChange);
     elements.templateSelect.addEventListener('change', handleTemplateSelectChange);
 
@@ -76,12 +68,6 @@ function handleTemplateSelectChange(e) {
     elements.editPromptText.value = value === 'video' ? VIDEO_PROMPT : TEXT_PROMPT;
     e.target.value = '';
     setStatus('Template loaded (unsaved)...', STATUS.DIRTY);
-}
-
-function handleProviderChange(e) {
-    state.provider = e.target.value;
-    chrome.storage.local.set({ [KEY_PROVIDER]: state.provider });
-    setStatus('Provider updated!', STATUS.SUCCESS, true);
 }
 
 function updateEditMode(value) {

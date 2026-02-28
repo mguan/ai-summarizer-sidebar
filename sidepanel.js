@@ -44,12 +44,6 @@ function setupEventListeners() {
         if (changes[KEY_CUSTOM_PROMPTS]) {
             state.prompts = sortPromptsByPatternLength(changes[KEY_CUSTOM_PROMPTS].newValue || []);
         }
-
-        if (changes[KEY_PROVIDER]) {
-            state.provider = changes[KEY_PROVIDER].newValue;
-            updateActiveTabUI();
-            updateSidePanelContent();
-        }
     });
 
     // Add tab click listeners
@@ -60,7 +54,10 @@ function setupEventListeners() {
             if (tab) {
                 const newProvider = tab.dataset.provider;
                 if (newProvider && newProvider !== state.provider) {
+                    state.provider = newProvider;
                     chrome.storage.local.set({ [KEY_PROVIDER]: newProvider });
+                    updateActiveTabUI();
+                    updateSidePanelContent();
                 }
             }
         });
