@@ -12,6 +12,7 @@ const STATUS = { SUCCESS: 'success', ERROR: 'error', DIRTY: 'dirty' };
 
 const elements = {
     patternSelect: document.getElementById('pattern-select'),
+    editAutoSubmit: document.getElementById('edit-auto-submit'),
     editArea: document.getElementById('edit-area'),
     editPattern: document.getElementById('edit-pattern'),
     editPromptText: document.getElementById('edit-prompt-text'),
@@ -21,7 +22,6 @@ const elements = {
     statusIndicator: document.getElementById('status-indicator'),
     providerSelect: document.getElementById('provider-select'),
     templateSelect: document.getElementById('template-select'),
-    editAutoSubmit: document.getElementById('edit-auto-submit'),
 };
 
 
@@ -50,20 +50,19 @@ function init() {
 }
 
 function setupEventListeners() {
-    elements.patternSelect.addEventListener('change', handlePatternSelectChange);
-
     elements.providerSelect.addEventListener('change', handleProviderChange);
+    elements.patternSelect.addEventListener('change', handlePatternSelectChange);
+    elements.templateSelect.addEventListener('change', handleTemplateSelectChange);
 
     elements.saveEditBtn.addEventListener('click', savePrompt);
     elements.deletePromptBtn.addEventListener('click', deletePrompt);
     elements.resetAllBtn.addEventListener('click', resetAll);
 
-    elements.templateSelect.addEventListener('change', handleTemplateSelectChange);
 
     // Dirty state tracking
     elements.editPattern.addEventListener('input', () => setStatus('URL pattern changed (unsaved)...', STATUS.DIRTY));
-    elements.editPromptText.addEventListener('input', () => setStatus('Prompt changed (unsaved)...', STATUS.DIRTY));
     elements.editAutoSubmit.addEventListener('change', () => setStatus('Auto submit changed (unsaved)...', STATUS.DIRTY));
+    elements.editPromptText.addEventListener('input', () => setStatus('Prompt changed (unsaved)...', STATUS.DIRTY));
 }
 
 // Event Handlers
@@ -93,14 +92,13 @@ function updateEditMode(value) {
     if (isNew) {
         elements.editPattern.value = "";
         elements.editPromptText.value = "";
-        elements.editAutoSubmit.checked = true;
+        elements.editAutoSubmit.checked = false;
     } else {
         const promptObj = state.prompts.find(p => p.pattern === value);
         if (promptObj) {
             elements.editPattern.value = promptObj.pattern;
+            elements.editAutoSubmit.checked = promptObj.autoSubmit;
             elements.editPromptText.value = promptObj.prompt;
-            // Fall back to legacy heuristic for prompts saved before this field existed.
-            elements.editAutoSubmit.checked = promptObj.autoSubmit ?? (promptObj.pattern !== '*');
         }
     }
 

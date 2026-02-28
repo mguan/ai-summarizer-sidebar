@@ -79,8 +79,7 @@ function calculateTargetUrl(url) {
     }
 
     const finalPrompt = match.prompt.replace(/{{URL}}/g, url);
-    // Use per-pattern autoSubmit flag; fall back to legacy heuristic for old data.
-    const autoSubmit = match.autoSubmit ?? (match.pattern !== '*');
+    const autoSubmit = match.autoSubmit;
 
     try {
         const targetUrl = new URL(baseUrl);
