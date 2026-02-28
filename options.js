@@ -27,17 +27,16 @@ const state = {
 };
 
 // Initialize
-function init() {
-    chrome.storage.local.get([KEY_CUSTOM_PROMPTS], (result) => {
-        state.prompts = result[KEY_CUSTOM_PROMPTS] || structuredClone(DEFAULT_PROMPTS);
+async function init() {
+    const result = await chrome.storage.local.get([KEY_CUSTOM_PROMPTS]);
+    state.prompts = result[KEY_CUSTOM_PROMPTS] || structuredClone(DEFAULT_PROMPTS);
 
-        if (!result[KEY_CUSTOM_PROMPTS]) {
-            chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
-        }
+    if (!result[KEY_CUSTOM_PROMPTS]) {
+        chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
+    }
 
-        renderPromptsSelect();
-        updateEditMode('new');
-    });
+    renderPromptsSelect();
+    updateEditMode('new');
 
     setupEventListeners();
 }
@@ -71,30 +70,16 @@ function handleTemplateSelectChange(e) {
 }
 
 function updateEditMode(value) {
-    const isNew = value === 'new';
-
     setStatus(); // Clear dirty state when switching
 
-    if (isNew) {
-        elements.editPattern.value = "";
-        elements.editPromptText.value = "";
-        elements.editAutoSubmit.checked = false;
-    } else {
-        const promptObj = state.prompts.find(p => p.pattern === value);
-        if (promptObj) {
-            elements.editPattern.value = promptObj.pattern;
-            elements.editAutoSubmit.checked = promptObj.autoSubmit;
-            elements.editPromptText.value = promptObj.prompt;
-        }
-    }
+    const promptObj = state.prompts.find(p => p.pattern === value);
 
+    elements.editPattern.value = promptObj?.pattern || '';
+    elements.editAutoSubmit.checked = promptObj?.autoSubmit || false;
+    elements.editPromptText.value = promptObj?.prompt || '';
     elements.editPattern.readOnly = false;
 
-    toggleVisibility(elements.deletePromptBtn, !isNew);
-}
-
-function toggleVisibility(element, isVisible) {
-    element.style.display = isVisible ? 'inline-flex' : 'none';
+    elements.deletePromptBtn.style.display = promptObj ? 'inline-flex' : 'none';
 }
 
 function renderPromptsSelect() {
@@ -116,43 +101,38 @@ function renderPromptsSelect() {
 }
 
 function restoreSelection(currentValue, currentPatternInInput) {
-    if (currentValue && (currentValue === 'new' || state.prompts.some(p => p.pattern === currentValue))) {
-        elements.patternSelect.value = currentValue;
-    } else if (state.prompts.some(p => p.pattern === currentPatternInInput)) {
-        elements.patternSelect.value = currentPatternInInput;
-    }
+    const isValid = val => val === 'new' || state.prompts.some(p => p.pattern === val);
+
+    elements.patternSelect.value = isValid(currentValue) ? currentValue
+        : isValid(currentPatternInInput) ? currentPatternInInput
+            : 'new';
 }
 
 // Logic Actions
 function savePrompt() {
-    const newPattern = elements.editPattern.value.trim();
-    const promptText = elements.editPromptText.value.trim();
+    const pattern = elements.editPattern.value.trim();
+    const prompt = elements.editPromptText.value.trim();
     const originalPattern = elements.patternSelect.value;
-    const isNew = originalPattern === 'new';
 
-    if (!newPattern || !promptText) {
+    if (!pattern || !prompt) {
         return setStatus('Please enter both a URL pattern and a prompt.', STATUS.ERROR);
     }
 
-    const exists = state.prompts.some(p => p.pattern === newPattern);
-    if (exists && (isNew || newPattern !== originalPattern)) {
+    const isDuplicate = state.prompts.some(p => p.pattern === pattern && pattern !== originalPattern);
+    if (isDuplicate) {
         return setStatus('URL pattern already exists! Please choose another.', STATUS.ERROR);
     }
 
     const autoSubmit = elements.editAutoSubmit.checked;
+    const existingIndex = state.prompts.findIndex(p => p.pattern === originalPattern);
 
-    if (isNew) {
-        state.prompts.push({ pattern: newPattern, prompt: promptText, autoSubmit });
+    if (existingIndex !== -1) {
+        state.prompts[existingIndex] = { pattern, prompt, autoSubmit };
     } else {
-        const index = state.prompts.findIndex(p => p.pattern === originalPattern);
-        if (index !== -1) {
-            state.prompts[index].pattern = newPattern;
-            state.prompts[index].prompt = promptText;
-            state.prompts[index].autoSubmit = autoSubmit;
-        }
+        state.prompts.push({ pattern, prompt, autoSubmit });
     }
 
-    saveAndRefresh("Changes saved!", newPattern);
+    saveAndRefresh("Changes saved!", pattern);
 }
 
 function deletePrompt() {

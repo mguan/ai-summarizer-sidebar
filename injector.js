@@ -23,11 +23,7 @@ function findFirst(selectors) {
 }
 
 function isButtonEnabled(button) {
-    return (
-        !!button &&
-        !button.hasAttribute('disabled') &&
-        button.getAttribute('aria-disabled') !== 'true'
-    );
+    return !!button && !button.disabled && button.getAttribute('aria-disabled') !== 'true';
 }
 
 function findFirstEnabledButton(selectors) {

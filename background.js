@@ -54,12 +54,14 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // Detect URL changes to trigger the content update
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
-        chrome.runtime.sendMessage({
-            type: MSG_UPDATE_CONTENT,
-            url: tab.url
-        }).catch((error) => {
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete' && tab.url?.startsWith('http')) {
+        try {
+            await chrome.runtime.sendMessage({
+                type: MSG_UPDATE_CONTENT,
+                url: tab.url
+            });
+        } catch (error) {
             // Suppress error if side panel is closed (no receiver), which is expected behavior.
             // However, we log it for debugging purposes if it's something else.
             if (
@@ -68,6 +70,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             ) {
                 console.debug('Background script message error:', error);
             }
-        });
+        }
     }
 });

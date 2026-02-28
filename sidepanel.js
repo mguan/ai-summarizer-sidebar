@@ -76,11 +76,10 @@ function updateActiveTabUI() {
 }
 
 // --- Core Logic ---
-function updateSidePanelContent() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const url = tabs?.[0]?.url;
-        if (url) updateIframeContentFromUrl(url);
-    });
+async function updateSidePanelContent() {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const url = tabs?.[0]?.url;
+    if (url) updateIframeContentFromUrl(url);
 }
 
 function updateIframeContentFromUrl(url) {
@@ -97,18 +96,17 @@ function calculateTargetUrl(url) {
 
     if (!url?.startsWith('http')) return baseUrl;
 
-    const match = findMatchingPrompt(url);
+    const match = state.prompts.find(item => globToRegex(item.pattern).test(url));
     if (!match) {
         return baseUrl;
     }
 
     const finalPrompt = match.prompt.replace(/{{URL}}/g, url);
-    const autoSubmit = match.autoSubmit;
 
     try {
         const targetUrl = new URL(baseUrl);
         targetUrl.searchParams.set(KEY_CUSTOM_PROMPTS, finalPrompt);
-        targetUrl.searchParams.set(KEY_AUTO_SUBMIT, autoSubmit.toString());
+        targetUrl.searchParams.set(KEY_AUTO_SUBMIT, match.autoSubmit.toString());
         return targetUrl.toString();
     } catch (e) {
         console.error('Invalid base URL:', baseUrl, e);
@@ -119,10 +117,6 @@ function calculateTargetUrl(url) {
 function globToRegex(pattern) {
     const parts = pattern.split('*').map(p => p.replace(/[.+?^${}()|[\]\\]/g, '\\$&'));
     return new RegExp('^' + parts.join('.*') + '$');
-}
-
-function findMatchingPrompt(url) {
-    return state.prompts.find(item => globToRegex(item.pattern).test(url)) || null;
 }
 
 // --- Start ---
