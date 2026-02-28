@@ -5,6 +5,7 @@ import {
     KEY_PROVIDER,
     MSG_UPDATE_CONTENT,
     PROVIDER_URLS,
+    PROVIDERS
 } from './constants.js';
 import { sortPromptsByPatternLength } from './utils.js';
 
@@ -85,7 +86,7 @@ async function updateSidePanelContent() {
 }
 
 function updateIframeContentFromUrl(url) {
-    const providers = ['chatgpt', 'claude', 'gemini', 'grok'];
+    const providers = Object.values(PROVIDERS);
     providers.forEach(provider => {
         const iframe = document.getElementById(`frame-${provider}`);
         if (!iframe) return;

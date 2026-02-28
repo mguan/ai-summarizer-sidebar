@@ -120,13 +120,20 @@ export const DEFAULT_PROMPTS = [
   { pattern: '*youtube.com/watch*', prompt: VIDEO_PROMPT, autoSubmit: true },
 ];
 
-export const DEFAULT_PROVIDER = 'gemini';
+export const PROVIDERS = {
+  CHATGPT: 'chatgpt',
+  CLAUDE: 'claude',
+  GEMINI: 'gemini',
+  GROK: 'grok',
+};
+
+export const DEFAULT_PROVIDER = PROVIDERS.GEMINI;
 
 export const PROVIDER_URLS = {
-  'chatgpt': 'https://chatgpt.com',
-  'claude': 'https://claude.ai/new',
-  'gemini': 'https://gemini.google.com/app',
-  'grok': 'https://grok.com',
+  [PROVIDERS.CHATGPT]: 'https://chatgpt.com',
+  [PROVIDERS.CLAUDE]: 'https://claude.ai/new',
+  [PROVIDERS.GEMINI]: 'https://gemini.google.com/app',
+  [PROVIDERS.GROK]: 'https://grok.com',
 };
 
 // These are also hardcoded in injector.js (content scripts cannot import modules).
