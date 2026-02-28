@@ -33,7 +33,7 @@ const state = {
 // Initialize
 function init() {
     chrome.storage.local.get([KEY_CUSTOM_PROMPTS, KEY_PROVIDER], (result) => {
-        state.prompts = result[KEY_CUSTOM_PROMPTS] || [...DEFAULT_PROMPTS];
+        state.prompts = result[KEY_CUSTOM_PROMPTS] || structuredClone(DEFAULT_PROMPTS);
         state.provider = result[KEY_PROVIDER] || DEFAULT_PROVIDER;
 
         if (!result[KEY_CUSTOM_PROMPTS]) {
@@ -182,7 +182,7 @@ function deletePrompt() {
 function resetAll() {
     if (!confirm('Reset ALL prompts to defaults?')) return;
 
-    state.prompts = [...DEFAULT_PROMPTS];
+    state.prompts = structuredClone(DEFAULT_PROMPTS);
     saveAndRefresh('Defaults restored!', 'new');
 }
 
