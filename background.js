@@ -4,7 +4,7 @@ import {
     KEY_CUSTOM_PROMPTS,
     KEY_PROVIDER,
     MSG_UPDATE_CONTENT,
-    PROVIDER_URLS,
+    PROVIDERS,
 } from './constants.js';
 
 // Open side panel on icon click
@@ -30,8 +30,8 @@ const RULES = [
         },
         condition: {
             // Match supported AI providers
-            regexFilter: `^(${Object.values(PROVIDER_URLS)
-                .map(url => url.replaceAll('.', '\\.'))
+            regexFilter: `^(${Object.values(PROVIDERS)
+                .map(provider => provider.url.replaceAll('.', '\\.'))
                 .join('|')
                 }).*`,
             resourceTypes: ['sub_frame'],

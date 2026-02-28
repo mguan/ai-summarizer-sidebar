@@ -4,7 +4,6 @@ import {
     KEY_CUSTOM_PROMPTS,
     KEY_PROVIDER,
     MSG_UPDATE_CONTENT,
-    PROVIDER_URLS,
     PROVIDERS
 } from './constants.js';
 import { sortPromptsByPatternLength } from './utils.js';
@@ -87,7 +86,8 @@ async function updateSidePanelContent() {
 
 function updateIframeContentFromUrl(url) {
     const providers = Object.values(PROVIDERS);
-    providers.forEach(provider => {
+    providers.forEach(providerObj => {
+        const provider = providerObj.id;
         const iframe = document.getElementById(`frame-${provider}`);
         if (!iframe) return;
 
@@ -95,7 +95,12 @@ function updateIframeContentFromUrl(url) {
             iframe.classList.remove('hidden');
 
             const targetUrl = calculateTargetUrl(url);
-            const isBaseUrl = targetUrl === (PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER]);
+
+            // Find base URL for current provider
+            const currentProviderObj = Object.values(PROVIDERS).find(p => p.id === state.provider) || Object.values(PROVIDERS).find(p => p.id === DEFAULT_PROVIDER);
+            const baseUrl = currentProviderObj.url;
+
+            const isBaseUrl = targetUrl === baseUrl;
             const noSrcSet = !iframe.getAttribute('src');
 
             let shouldUpdate = noSrcSet;
@@ -118,7 +123,8 @@ function updateIframeContentFromUrl(url) {
 }
 
 function calculateTargetUrl(url) {
-    const baseUrl = PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER];
+    const currentProviderObj = Object.values(PROVIDERS).find(p => p.id === state.provider) || Object.values(PROVIDERS).find(p => p.id === DEFAULT_PROVIDER);
+    const baseUrl = currentProviderObj.url;
 
     if (!url?.startsWith('http')) return baseUrl;
 

@@ -121,24 +121,20 @@ export const DEFAULT_PROMPTS = [
 ];
 
 export const PROVIDERS = {
-  CHATGPT: 'chatgpt',
-  CLAUDE: 'claude',
-  GEMINI: 'gemini',
-  GROK: 'grok',
+  CHATGPT: { id: 'chatgpt', url: 'https://chatgpt.com' },
+  CLAUDE: { id: 'claude', url: 'https://claude.ai/new' },
+  GEMINI: { id: 'gemini', url: 'https://gemini.google.com/app' },
+  GROK: { id: 'grok', url: 'https://grok.com' },
 };
 
-export const DEFAULT_PROVIDER = PROVIDERS.GEMINI;
+export const DEFAULT_PROVIDER = PROVIDERS.GEMINI.id;
 
-export const PROVIDER_URLS = {
-  [PROVIDERS.CHATGPT]: 'https://chatgpt.com',
-  [PROVIDERS.CLAUDE]: 'https://claude.ai/new',
-  [PROVIDERS.GEMINI]: 'https://gemini.google.com/app',
-  [PROVIDERS.GROK]: 'https://grok.com',
-};
-
+///////////////////////////////////////////////////////////
 // These are also hardcoded in injector.js (content scripts cannot import modules).
 // If you change these values, update injector.js to match.
 export const KEY_CUSTOM_PROMPTS = 'custom_prompts';
 export const KEY_AUTO_SUBMIT = 'auto_submit';
+///////////////////////////////////////////////////////////
+
 export const KEY_PROVIDER = 'provider';
 export const MSG_UPDATE_CONTENT = 'update_content';
