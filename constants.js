@@ -123,11 +123,11 @@ export const DEFAULT_PROMPTS = [
 export const PROVIDERS = {
   chatgpt: { url: 'https://chatgpt.com' },
   claude:  { url: 'https://claude.ai/new' },
-  gemini:  { url: 'https://gemini.google.com/app' },
+  gemini:  { url: 'https://gemini.google.com/app', default: true },
   grok:    { url: 'https://grok.com' },
 };
 
-export const DEFAULT_PROVIDER = 'gemini';
+export const DEFAULT_PROVIDER = Object.keys(PROVIDERS).find(k => PROVIDERS[k].default);
 
 export const PROMPT_TEMPLATES = {
   text: TEXT_PROMPT,
