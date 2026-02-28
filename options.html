@@ -15,54 +15,54 @@
 
         <main>
             <div class="form-group">
-                    <label for="pattern-select">Select Pattern to Edit</label>
-                    <select id="pattern-select">
-                        <option value="new">-- Add New Pattern --</option>
-                    </select>
-                </div>
-                <div id="edit-area" class="card-panel">
-                    <div class="form-group">
-                        <div class="label-row">
-                            <label class="sub-label">URL Pattern</label>
-                            <div class="help-icon">?
-                                <div class="help-tooltip">
-                                    <strong>Pattern Matching Rules:</strong>
-                                    <ul>
-                                        <li><code>*</code> matches any part of the URL.</li>
-                                        <li>If multiple patterns match, the longest one is used.</li>
-                                        <li>Use the <strong>Auto Submit</strong> toggle to control whether the prompt is
-                                            sent automatically.</li>
-                                    </ul>
-                                </div>
+                <label for="pattern-select">Select URL Pattern to Edit</label>
+                <select id="pattern-select">
+                    <option value="new">-- Add New Pattern --</option>
+                </select>
+            </div>
+            <div id="edit-area" class="card-panel">
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="sub-label">URL Pattern</label>
+                        <div class="help-icon">?
+                            <div class="help-tooltip">
+                                <strong>Pattern Matching Rules:</strong>
+                                <ul>
+                                    <li><code>*</code> matches any part of the URL.</li>
+                                    <li>If multiple patterns match, the longest one is used.</li>
+                                    <li>Use the <strong>Auto Submit</strong> toggle to control whether the prompt is
+                                        sent automatically.</li>
+                                </ul>
                             </div>
-                            <label class="toggle-label">
-                                <input type="checkbox" id="edit-auto-submit">
-                                <span class="toggle-track"></span>
-                                <span class="sub-label">Auto Submit</span>
-                            </label>
                         </div>
-                        <input type="text" id="edit-pattern" placeholder="e.g. *wikipedia.org* or *youtube.com*">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="edit-auto-submit">
+                            <span class="toggle-track"></span>
+                            <span class="sub-label">Auto Submit</span>
+                        </label>
                     </div>
-                    <div class="form-group">
-                        <div class="label-row">
-                            <label class="sub-label">Prompt Template</label>
-                            <select id="template-select" class="template-select">
-                                <option value="">Load template...</option>
-                                <option value="text">Text Prompt</option>
-                                <option value="video">Video Prompt</option>
-                            </select>
-                        </div>
-                        <textarea id="edit-prompt-text" placeholder="Enter instructions for the AI..."></textarea>
+                    <input type="text" id="edit-pattern" placeholder="e.g. *wikipedia.org* or *youtube.com*">
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="sub-label">Prompt Template</label>
+                        <select id="template-select" class="template-select">
+                            <option value="">Load template...</option>
+                            <option value="text">Text Prompt</option>
+                            <option value="video">Video Prompt</option>
+                        </select>
                     </div>
-                    <div class="flex-between">
-                        <div id="status-indicator" class="status-bar"></div>
-                        <div class="btn-group">
-                            <button id="reset-all-btn" class="btn-secondary">Reset All</button>
-                            <button id="delete-prompt-btn" class="btn-secondary hidden">Delete</button>
-                            <button id="save-edit-btn" class="btn-primary">Save</button>
-                        </div>
+                    <textarea id="edit-prompt-text" placeholder="Enter instructions for the AI..."></textarea>
+                </div>
+                <div class="flex-between">
+                    <div id="status-indicator" class="status-bar"></div>
+                    <div class="btn-group">
+                        <button id="reset-all-btn" class="btn-secondary">Reset All</button>
+                        <button id="delete-prompt-btn" class="btn-secondary hidden">Delete</button>
+                        <button id="save-edit-btn" class="btn-primary">Save</button>
                     </div>
                 </div>
+            </div>
 
         </main>
     </div>
