@@ -290,7 +290,6 @@ input:read-only {
   user-select: none;
   margin-left: auto;
   margin-bottom: 0;
-  font-weight: 500;
 }
 
 .toggle-label input[type="checkbox"] {
@@ -334,14 +333,6 @@ input:read-only {
 
 .toggle-label input[type="checkbox"]:checked + .toggle-track .toggle-thumb {
   transform: translateX(16px);
-}
-
-.toggle-text {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  font-weight: 600;
 }
 
 
