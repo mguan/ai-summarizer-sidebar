@@ -11,7 +11,7 @@ import { sortPromptsByPatternLength } from './utils.js';
 const STATUS = { SUCCESS: 'success', ERROR: 'error', DIRTY: 'dirty' };
 
 const elements = {
-    promptSelect: document.getElementById('prompt-select'),
+    patternSelect: document.getElementById('pattern-select'),
     editArea: document.getElementById('edit-area'),
     editPattern: document.getElementById('edit-pattern'),
     editPromptText: document.getElementById('edit-prompt-text'),
@@ -50,7 +50,7 @@ function init() {
 }
 
 function setupEventListeners() {
-    elements.promptSelect.addEventListener('change', handlePromptSelectChange);
+    elements.patternSelect.addEventListener('change', handlePatternSelectChange);
 
     elements.providerSelect.addEventListener('change', handleProviderChange);
 
@@ -67,7 +67,7 @@ function setupEventListeners() {
 }
 
 // Event Handlers
-function handlePromptSelectChange(e) {
+function handlePatternSelectChange(e) {
     updateEditMode(e.target.value);
 }
 
@@ -114,10 +114,10 @@ function toggleVisibility(element, isVisible) {
 }
 
 function renderPromptsSelect() {
-    const currentValue = elements.promptSelect.value;
+    const currentValue = elements.patternSelect.value;
     const currentPatternInInput = elements.editPattern.value;
 
-    elements.promptSelect.innerHTML = '<option value="new">-- Add New Pattern --</option>';
+    elements.patternSelect.innerHTML = '<option value="new">-- Add New Pattern --</option>';
 
     const sortedPrompts = sortPromptsByPatternLength(state.prompts);
 
@@ -125,7 +125,7 @@ function renderPromptsSelect() {
         const option = document.createElement('option');
         option.value = item.pattern;
         option.textContent = item.pattern;
-        elements.promptSelect.appendChild(option);
+        elements.patternSelect.appendChild(option);
     });
 
     restoreSelection(currentValue, currentPatternInInput);
@@ -133,9 +133,9 @@ function renderPromptsSelect() {
 
 function restoreSelection(currentValue, currentPatternInInput) {
     if (currentValue && (currentValue === 'new' || state.prompts.some(p => p.pattern === currentValue))) {
-        elements.promptSelect.value = currentValue;
+        elements.patternSelect.value = currentValue;
     } else if (state.prompts.some(p => p.pattern === currentPatternInInput)) {
-        elements.promptSelect.value = currentPatternInInput;
+        elements.patternSelect.value = currentPatternInInput;
     }
 }
 
@@ -143,7 +143,7 @@ function restoreSelection(currentValue, currentPatternInInput) {
 function savePrompt() {
     const newPattern = elements.editPattern.value.trim();
     const promptText = elements.editPromptText.value.trim();
-    const originalPattern = elements.promptSelect.value;
+    const originalPattern = elements.patternSelect.value;
     const isNew = originalPattern === 'new';
 
     if (!newPattern || !promptText) {
@@ -172,7 +172,7 @@ function savePrompt() {
 }
 
 function deletePrompt() {
-    const pattern = elements.promptSelect.value;
+    const pattern = elements.patternSelect.value;
     if (pattern === 'new' || !confirm(`Delete prompt for "${pattern}"?`))
         return;
 
@@ -193,7 +193,7 @@ function saveAndRefresh(message, nextSelection) {
     if (message) setStatus(message, STATUS.SUCCESS, true);
 
     renderPromptsSelect();
-    elements.promptSelect.value = nextSelection;
+    elements.patternSelect.value = nextSelection;
     updateEditMode(nextSelection);
 }
 
