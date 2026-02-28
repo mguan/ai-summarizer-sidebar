@@ -67,13 +67,8 @@ function setupEventListeners() {
 }
 
 function updateActiveTabUI() {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        if (tab.dataset.provider === state.provider) {
-            tab.classList.add('active');
-        } else {
-            tab.classList.remove('active');
-        }
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.provider === state.provider);
     });
 }
 
@@ -85,53 +80,36 @@ async function updateSidePanelContent() {
 }
 
 function updateIframeContentFromUrl(url) {
-    const providers = Object.values(PROVIDERS);
-    providers.forEach(providerObj => {
-        const provider = providerObj.id;
+    Object.entries(PROVIDERS).forEach(([provider, { url: baseUrl }]) => {
         const iframe = document.getElementById(`frame-${provider}`);
         if (!iframe) return;
 
-        if (provider === state.provider) {
-            iframe.classList.remove('hidden');
-
-            const targetUrl = calculateTargetUrl(url);
-
-            // Find base URL for current provider
-            const currentProviderObj = Object.values(PROVIDERS).find(p => p.id === state.provider) || Object.values(PROVIDERS).find(p => p.id === DEFAULT_PROVIDER);
-            const baseUrl = currentProviderObj.url;
-
-            const isBaseUrl = targetUrl === baseUrl;
-            const noSrcSet = !iframe.getAttribute('src');
-
-            let shouldUpdate = noSrcSet;
-
-            if (!shouldUpdate && url !== lastProcessedUrls[provider]) {
-                lastProcessedUrls[provider] = url;
-                if (!isBaseUrl) {
-                    shouldUpdate = true;
-                }
-            }
-
-            if (shouldUpdate) {
-                iframe.src = targetUrl;
-                lastProcessedUrls[provider] = url;
-            }
-        } else {
+        if (provider !== state.provider) {
             iframe.classList.add('hidden');
+            return;
+        }
+
+        iframe.classList.remove('hidden');
+        const targetUrl = calculateTargetUrl(url, baseUrl);
+
+        const isFirstLoad = !iframe.getAttribute('src');
+        const urlChanged = url !== lastProcessedUrls[provider];
+        const hasPromptMatch = targetUrl !== baseUrl;
+
+        if (isFirstLoad || urlChanged) {
+            lastProcessedUrls[provider] = url;
+            if (isFirstLoad || hasPromptMatch) {
+                iframe.src = targetUrl;
+            }
         }
     });
 }
 
-function calculateTargetUrl(url) {
-    const currentProviderObj = Object.values(PROVIDERS).find(p => p.id === state.provider) || Object.values(PROVIDERS).find(p => p.id === DEFAULT_PROVIDER);
-    const baseUrl = currentProviderObj.url;
-
+function calculateTargetUrl(url, baseUrl) {
     if (!url?.startsWith('http')) return baseUrl;
 
     const match = state.prompts.find(item => globToRegex(item.pattern).test(url));
-    if (!match) {
-        return baseUrl;
-    }
+    if (!match) return baseUrl;
 
     const finalPrompt = match.prompt.replace(/{{URL}}/g, url);
 

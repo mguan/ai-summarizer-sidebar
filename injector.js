@@ -43,9 +43,7 @@ function fillContentEditable(input, text) {
 }
 
 function fillGrokInput(input, text) {
-    input.focus();
-    input.innerHTML = `<p>${text}</p>`;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+    fillContentEditable(input, `<p>${text}</p>`);
 }
 
 function fillGeminiInput(input, text) {

@@ -121,13 +121,18 @@ export const DEFAULT_PROMPTS = [
 ];
 
 export const PROVIDERS = {
-  CHATGPT: { id: 'chatgpt', url: 'https://chatgpt.com' },
-  CLAUDE: { id: 'claude', url: 'https://claude.ai/new' },
-  GEMINI: { id: 'gemini', url: 'https://gemini.google.com/app' },
-  GROK: { id: 'grok', url: 'https://grok.com' },
+  chatgpt: { url: 'https://chatgpt.com' },
+  claude:  { url: 'https://claude.ai/new' },
+  gemini:  { url: 'https://gemini.google.com/app' },
+  grok:    { url: 'https://grok.com' },
 };
 
-export const DEFAULT_PROVIDER = PROVIDERS.GEMINI.id;
+export const DEFAULT_PROVIDER = 'gemini';
+
+export const PROMPT_TEMPLATES = {
+  text: TEXT_PROMPT,
+  video: VIDEO_PROMPT,
+};
 
 ///////////////////////////////////////////////////////////
 // These are also hardcoded in injector.js (content scripts cannot import modules).

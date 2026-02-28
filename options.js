@@ -1,8 +1,7 @@
 import {
     DEFAULT_PROMPTS,
     KEY_CUSTOM_PROMPTS,
-    TEXT_PROMPT,
-    VIDEO_PROMPT,
+    PROMPT_TEMPLATES,
 } from './constants.js';
 import { sortPromptsByPatternLength } from './utils.js';
 
@@ -64,13 +63,13 @@ function handlePatternSelectChange(e) {
 function handleTemplateSelectChange(e) {
     const value = e.target.value;
     if (!value) return;
-    elements.editPromptText.value = value === 'video' ? VIDEO_PROMPT : TEXT_PROMPT;
+    elements.editPromptText.value = PROMPT_TEMPLATES[value] ?? PROMPT_TEMPLATES.text;
     e.target.value = '';
     setStatus('Template loaded (unsaved)...', STATUS.DIRTY);
 }
 
 function updateEditMode(value) {
-    setStatus(); // Clear dirty state when switching
+    clearStatus();
 
     const promptObj = state.prompts.find(p => p.pattern === value);
 
@@ -162,6 +161,8 @@ function saveAndRefresh(message, nextSelection) {
 }
 
 // Status Indicator Logic
+function clearStatus() { setStatus(); }
+
 // Pass timeout=true for transient post-save confirmations (auto-dismisses after 2s).
 // Omit timeout (or pass false) for persistent messages like unsaved state.
 function setStatus(message = '', type = null, timeout = false) {

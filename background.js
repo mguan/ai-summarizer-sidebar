@@ -31,7 +31,7 @@ const RULES = [
         condition: {
             // Match supported AI providers
             regexFilter: `^(${Object.values(PROVIDERS)
-                .map(provider => provider.url.replaceAll('.', '\\.'))
+                .map(({ url }) => url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
                 .join('|')
                 }).*`,
             resourceTypes: ['sub_frame'],
