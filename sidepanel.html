@@ -89,6 +89,10 @@
             border: none;
             background-color: #ffffff;
         }
+
+        iframe.hidden {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -99,7 +103,10 @@
         <div class="tab" data-provider="gemini">Gemini</div>
         <div class="tab" data-provider="grok">Grok</div>
     </div>
-    <iframe id="content-frame" src=""></iframe>
+    <iframe id="frame-chatgpt" class="hidden" src=""></iframe>
+    <iframe id="frame-claude" class="hidden" src=""></iframe>
+    <iframe id="frame-gemini" class="hidden" src=""></iframe>
+    <iframe id="frame-grok" class="hidden" src=""></iframe>
     <script type="module" src="sidepanel.js"></script>
 </body>
 

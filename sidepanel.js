@@ -14,6 +14,8 @@ const state = {
     prompts: []
 };
 
+const lastProcessedUrls = {};
+
 // --- Initialization ---
 async function init() {
     await loadSettings();
@@ -83,12 +85,35 @@ async function updateSidePanelContent() {
 }
 
 function updateIframeContentFromUrl(url) {
-    const targetUrl = calculateTargetUrl(url);
+    const providers = ['chatgpt', 'claude', 'gemini', 'grok'];
+    providers.forEach(provider => {
+        const iframe = document.getElementById(`frame-${provider}`);
+        if (!iframe) return;
 
-    const iframe = document.getElementById('content-frame');
-    if (iframe.src !== targetUrl) {
-        iframe.src = targetUrl;
-    }
+        if (provider === state.provider) {
+            iframe.classList.remove('hidden');
+
+            const targetUrl = calculateTargetUrl(url);
+            const isBaseUrl = targetUrl === (PROVIDER_URLS[state.provider] || PROVIDER_URLS[DEFAULT_PROVIDER]);
+            const noSrcSet = !iframe.getAttribute('src');
+
+            let shouldUpdate = noSrcSet;
+
+            if (!shouldUpdate && url !== lastProcessedUrls[provider]) {
+                lastProcessedUrls[provider] = url;
+                if (!isBaseUrl) {
+                    shouldUpdate = true;
+                }
+            }
+
+            if (shouldUpdate) {
+                iframe.src = targetUrl;
+                lastProcessedUrls[provider] = url;
+            }
+        } else {
+            iframe.classList.add('hidden');
+        }
+    });
 }
 
 function calculateTargetUrl(url) {
