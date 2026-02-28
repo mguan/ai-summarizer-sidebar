@@ -54,7 +54,7 @@ function fillGeminiInput(input, text) {
     input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
-const PROVIDERS = {
+const PROVIDER_ADAPTERS = {
     'chatgpt.com': {
         getInput: () => findFirst(['#prompt-textarea']),
         getSubmitButton: () =>
@@ -97,7 +97,7 @@ const PROVIDERS = {
 
 function getProviderAdapter() {
     const hostname = window.location.hostname;
-    for (const [providerHost, adapter] of Object.entries(PROVIDERS)) {
+    for (const [providerHost, adapter] of Object.entries(PROVIDER_ADAPTERS)) {
         if (hostname.includes(providerHost)) {
             return adapter;
         }
