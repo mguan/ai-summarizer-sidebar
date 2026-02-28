@@ -111,13 +111,13 @@ citing specific examples of tone or evidence from the text.
 You must generate your output using the same language as the content.`;
 
 export const DEFAULT_PROMPTS = [
-  { pattern: '*', prompt: TEXT_PROMPT },
-  { pattern: '*abcnews.com/Politics*', prompt: TEXT_PROMPT },
-  { pattern: '*cnn.com/20*', prompt: TEXT_PROMPT },
-  { pattern: '*foxnews.com/politics*', prompt: TEXT_PROMPT },
-  { pattern: '*nytimes.com/20*', prompt: TEXT_PROMPT },
-  { pattern: '*wenxuecity.com/news/*', prompt: TEXT_PROMPT },
-  { pattern: '*youtube.com/watch*', prompt: VIDEO_PROMPT },
+  { pattern: '*', prompt: TEXT_PROMPT, autoSubmit: false },
+  { pattern: '*abcnews.com/Politics*', prompt: TEXT_PROMPT, autoSubmit: true },
+  { pattern: '*cnn.com/20*', prompt: TEXT_PROMPT, autoSubmit: true },
+  { pattern: '*foxnews.com/politics*', prompt: TEXT_PROMPT, autoSubmit: true },
+  { pattern: '*nytimes.com/20*', prompt: TEXT_PROMPT, autoSubmit: true },
+  { pattern: '*wenxuecity.com/news/*', prompt: TEXT_PROMPT, autoSubmit: true },
+  { pattern: '*youtube.com/watch*', prompt: VIDEO_PROMPT, autoSubmit: true },
 ];
 
 export const DEFAULT_PROVIDER = 'gemini';

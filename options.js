@@ -21,6 +21,7 @@ const elements = {
     statusIndicator: document.getElementById('status-indicator'),
     providerSelect: document.getElementById('provider-select'),
     templateSelect: document.getElementById('template-select'),
+    editAutoSubmit: document.getElementById('edit-auto-submit'),
 };
 
 
@@ -62,6 +63,7 @@ function setupEventListeners() {
     // Dirty state tracking
     elements.editPattern.addEventListener('input', () => setStatus('URL pattern changed (unsaved)...', STATUS.DIRTY));
     elements.editPromptText.addEventListener('input', () => setStatus('Prompt changed (unsaved)...', STATUS.DIRTY));
+    elements.editAutoSubmit.addEventListener('change', () => setStatus('Auto submit changed (unsaved)...', STATUS.DIRTY));
 }
 
 // Event Handlers
@@ -91,11 +93,14 @@ function updateEditMode(value) {
     if (isNew) {
         elements.editPattern.value = "";
         elements.editPromptText.value = "";
+        elements.editAutoSubmit.checked = true;
     } else {
         const promptObj = state.prompts.find(p => p.pattern === value);
         if (promptObj) {
             elements.editPattern.value = promptObj.pattern;
             elements.editPromptText.value = promptObj.prompt;
+            // Fall back to legacy heuristic for prompts saved before this field existed.
+            elements.editAutoSubmit.checked = promptObj.autoSubmit ?? (promptObj.pattern !== '*');
         }
     }
 
@@ -150,13 +155,16 @@ function savePrompt() {
         return setStatus('URL pattern already exists! Please choose another.', STATUS.ERROR);
     }
 
+    const autoSubmit = elements.editAutoSubmit.checked;
+
     if (isNew) {
-        state.prompts.push({ pattern: newPattern, prompt: promptText });
+        state.prompts.push({ pattern: newPattern, prompt: promptText, autoSubmit });
     } else {
         const index = state.prompts.findIndex(p => p.pattern === originalPattern);
         if (index !== -1) {
             state.prompts[index].pattern = newPattern;
             state.prompts[index].prompt = promptText;
+            state.prompts[index].autoSubmit = autoSubmit;
         }
     }
 
