@@ -56,7 +56,7 @@ const PROVIDER_ADAPTERS = {
     'chatgpt.com': {
         getInput: () => findFirst(['#prompt-textarea']),
         getSubmitButton: () =>
-            findFirst([
+            findFirstEnabledButton([
                 'button[data-testid="send-button"]',
                 '#composer-submit-button',
             ]),
@@ -64,7 +64,7 @@ const PROVIDER_ADAPTERS = {
     },
     'claude.ai': {
         getInput: () => findFirst(['div[contenteditable="true"].ProseMirror']),
-        getSubmitButton: () => findFirst(['button[aria-label*="Send"]']),
+        getSubmitButton: () => findFirstEnabledButton(['button[aria-label*="Send"]']),
         fillInput: fillContentEditable,
     },
     'gemini.google.com': {
@@ -88,7 +88,7 @@ const PROVIDER_ADAPTERS = {
     'grok.com': {
         getInput: () => findFirst(['.tiptap.ProseMirror']),
         getSubmitButton: () =>
-            findFirst(['button[aria-label="Send"]', 'button[type="submit"]']),
+            findFirstEnabledButton(['button[aria-label="Send"]', 'button[type="submit"]']),
         fillInput: fillGrokInput,
     },
 };
