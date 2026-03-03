@@ -41,7 +41,7 @@ async function init() {
 }
 
 function setupEventListeners() {
-    elements.patternSelect.addEventListener('change', handlePatternSelectChange);
+    elements.patternSelect.addEventListener('change', e => updateEditMode(e.target.value));
     elements.templateSelect.addEventListener('change', handleTemplateSelectChange);
 
     elements.saveEditBtn.addEventListener('click', savePrompt);
@@ -56,10 +56,6 @@ function setupEventListeners() {
 }
 
 // Event Handlers
-function handlePatternSelectChange(e) {
-    updateEditMode(e.target.value);
-}
-
 function handleTemplateSelectChange(e) {
     const value = e.target.value;
     if (!value) return;
@@ -69,7 +65,7 @@ function handleTemplateSelectChange(e) {
 }
 
 function updateEditMode(value) {
-    clearStatus();
+    setStatus();
 
     const promptObj = state.prompts.find(p => p.pattern === value);
 
@@ -161,8 +157,6 @@ function saveAndRefresh(message, nextSelection) {
 }
 
 // Status Indicator Logic
-function clearStatus() { setStatus(); }
-
 // Pass timeout=true for transient post-save confirmations (auto-dismisses after 2s).
 // Omit timeout (or pass false) for persistent messages like unsaved state.
 function setStatus(message = '', type = null, timeout = false) {
