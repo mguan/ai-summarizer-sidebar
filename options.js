@@ -149,11 +149,13 @@ function resetAll() {
 
 function saveAndRefresh(message, nextSelection) {
     chrome.storage.local.set({ [KEY_CUSTOM_PROMPTS]: state.prompts });
-    if (message) setStatus(message, STATUS.SUCCESS, true);
 
     renderPromptsSelect();
     elements.patternSelect.value = nextSelection;
     updateEditMode(nextSelection);
+
+    // Must come after updateEditMode, which resets the status.
+    if (message) setStatus(message, STATUS.SUCCESS, true);
 }
 
 // Status Indicator Logic
