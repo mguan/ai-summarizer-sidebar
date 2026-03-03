@@ -10,7 +10,6 @@ const STATUS = { SUCCESS: 'success', ERROR: 'error', DIRTY: 'dirty' };
 const elements = {
     patternSelect: document.getElementById('pattern-select'),
     editAutoSubmit: document.getElementById('edit-auto-submit'),
-    editArea: document.getElementById('edit-area'),
     editPattern: document.getElementById('edit-pattern'),
     editPromptText: document.getElementById('edit-prompt-text'),
     saveEditBtn: document.getElementById('save-edit-btn'),
@@ -78,9 +77,6 @@ function updateEditMode(value) {
 }
 
 function renderPromptsSelect() {
-    const currentValue = elements.patternSelect.value;
-    const currentPatternInInput = elements.editPattern.value;
-
     elements.patternSelect.innerHTML = '<option value="new">-- Add New Pattern --</option>';
 
     const sortedPrompts = sortPromptsByPatternLength(state.prompts);
@@ -91,16 +87,6 @@ function renderPromptsSelect() {
         option.textContent = item.pattern;
         elements.patternSelect.appendChild(option);
     });
-
-    restoreSelection(currentValue, currentPatternInInput);
-}
-
-function restoreSelection(currentValue, currentPatternInInput) {
-    const isValid = val => val === 'new' || state.prompts.some(p => p.pattern === val);
-
-    elements.patternSelect.value = isValid(currentValue) ? currentValue
-        : isValid(currentPatternInInput) ? currentPatternInInput
-            : 'new';
 }
 
 // Logic Actions
@@ -141,10 +127,10 @@ function deletePrompt() {
 
 
 function resetAll() {
-    if (!confirm('Reset ALL prompts to defaults?')) return;
+    if (!confirm('Reset ALL patterns to defaults?')) return;
 
     state.prompts = structuredClone(DEFAULT_PROMPTS);
-    saveAndRefresh('Defaults restored!', 'new');
+    saveAndRefresh('All patterns restored and saved!', 'new');
 }
 
 function saveAndRefresh(message, nextSelection) {
