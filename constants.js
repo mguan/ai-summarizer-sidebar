@@ -52,7 +52,8 @@ verdicts:
 **Reasoning**: Provide 2–3 sentences explaining the logic behind the verdict,
 citing specific examples of tone or evidence from the text.
 
-You must generate your output using the same language as the video.`;
+Generate your output in English unless the spoken audio of the video is in 
+a different language; in that case, match the spoken language of the video.`;
 
 export const TEXT_PROMPT = `You are an expert investigative journalist and
 master of information hygiene. Your goal is to provide a concise summary of the
@@ -122,9 +123,9 @@ export const DEFAULT_PROMPTS = [
 
 export const PROVIDERS = {
   chatgpt: { url: 'https://chatgpt.com' },
-  claude:  { url: 'https://claude.ai/new' },
-  gemini:  { url: 'https://gemini.google.com/app' },
-  grok:    { url: 'https://grok.com' },
+  claude: { url: 'https://claude.ai/new' },
+  gemini: { url: 'https://gemini.google.com/app' },
+  grok: { url: 'https://grok.com' },
 };
 
 export const DEFAULT_PROVIDER = 'gemini';
